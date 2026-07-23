@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Github, Loader2 } from "lucide-react";
+import { Computer, Loader2 } from "lucide-react";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -9,7 +9,6 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
 
 // Validation Schema
 const loginSchema = z.object({
@@ -22,7 +21,7 @@ const loginSchema = z.object({
 type FormData = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
-  const { toast } = useToast();
+  // const { toast } = Toaster();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const {
@@ -45,16 +44,16 @@ export function LoginForm() {
 
       await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate API delay
 
-      toast({
-        title: "Success!",
-        description: "You have been logged in.",
-      });
+      // toast({
+      //   title: "Success!",
+      //   description: "You have been logged in.",
+      // });
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Invalid credentials. Please try again.",
-      });
+      // toast({
+      //   variant: "destructive",
+      //   title: "Error",
+      //   description: "Invalid credentials. Please try again.",
+      // });
     } finally {
       setIsLoading(false);
     }
@@ -119,7 +118,7 @@ export function LoginForm() {
         {isLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <Github className="mr-2 h-4 w-4" />
+          <Computer className="mr-2 h-4 w-4" />
         )}{" "}
         Github
       </Button>
