@@ -1,0 +1,22 @@
+// tailwind.config.js
+module.exports = {
+    purge: [],
+    darkMode: false, // or 'media' or 'class'
+    theme: {
+        extend: {
+            animation: {
+                marquee: "marquee 25s linear infinite",
+            },
+            keyframes: {
+                marquee: {
+                    "0%": { transform: "translateX(0%)" },
+                    "100%": { transform: "translateX(-50%)" },
+                },
+            },
+        }
+    },
+    variants: {
+        extend: {},
+    },
+    plugins: [],
+}
