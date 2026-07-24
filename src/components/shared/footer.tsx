@@ -1,6 +1,6 @@
 import { BriefcaseBusiness } from "lucide-react";
 import Link from "next/link";
-import { LuGithub, LuLinkedin } from "react-icons/lu";
+import { LuGithub, LuLinkedin, LuTwitter } from "react-icons/lu";
 
 export function Footer() {
   return (
@@ -20,7 +20,7 @@ export function Footer() {
               your place, build your future.
             </p>
             <div className="flex gap-4">
-              <Twitter className="h-5 w-5 text-muted-foreground hover:text-blue-400 cursor-pointer" />
+              <LuTwitter className="h-5 w-5 text-muted-foreground hover:text-blue-400 cursor-pointer" />
               <LuGithub className="h-5 w-5 text-muted-foreground hover:text-white cursor-pointer" />
               <LuLinkedin className="h-5 w-5 text-muted-foreground hover:text-blue-700 cursor-pointer" />
             </div>

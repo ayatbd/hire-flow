@@ -51,7 +51,7 @@ export function JobCategories() {
           Explore opportunities across popular tech niches.
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[180px]">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-45">
         {categories.map((cat, i) => (
           <div
             key={i}
@@ -65,6 +65,7 @@ export function JobCategories() {
                 {/* {React.cloneElement(cat.icon as React.ReactElement, {
                   className: "w-6 h-6 text-blue-600",
                 })} */}
+                5
               </div>
               <div>
                 <h3 className="font-bold text-xl">{cat.name}</h3>

@@ -40,7 +40,7 @@ export function Section({
     <section
       id={id}
       className={cn(
-        "py-16 md:py-24 lg:py-32", // Standardized vertical padding
+        "py-10 md:py-16 lg:py-24", // Standardized vertical padding
         backgrounds[background],
         className,
       )}
