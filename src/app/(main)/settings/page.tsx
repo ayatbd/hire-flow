@@ -1,7 +1,6 @@
-import { AccountSettings } from "@/components/dashboard/settings/account-settings";
-import { NotificationSettings } from "@/components/dashboard/settings/notification-settings";
-import { ProfessionalSettings } from "@/components/dashboard/settings/professional-settings";
-import { ProfileSettings } from "@/components/dashboard/settings/profile-settings";
+import { NotificationSettings } from "@/components/settings/notification-settings";
+import { ProfessionalSettings } from "@/components/settings/professional-settings";
+import { ProfileSettings } from "@/components/settings/profile-settings";
 import { Container } from "@/components/shared/container";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Bell, Briefcase, Lock, User } from "lucide-react";
@@ -58,7 +57,7 @@ export default function SettingsPage() {
               <ProfessionalSettings />
             </TabsContent>
             <TabsContent value="account" className="m-0">
-              <AccountSettings />
+              {/* <AccountSettings /> */}
             </TabsContent>
             <TabsContent value="notifications" className="m-0">
               <NotificationSettings />
