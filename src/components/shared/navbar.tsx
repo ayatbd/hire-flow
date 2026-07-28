@@ -119,7 +119,7 @@ export function Navbar() {
                       <DropdownMenuItem>
                         <Link
                           href="/dashboard"
-                          className="cursor-pointer flex items-center"
+                          className="cursor-pointer flex items-center w-full"
                         >
                           <User className="mr-2 h-4 w-4" /> Dashboard
                         </Link>
@@ -127,7 +127,7 @@ export function Navbar() {
                       <DropdownMenuItem>
                         <Link
                           href="/settings"
-                          className="cursor-pointer flex items-center"
+                          className="cursor-pointer flex items-center w-full"
                         >
                           <Settings className="mr-2 h-4 w-4" /> Settings
                         </Link>
