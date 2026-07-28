@@ -50,8 +50,7 @@ export default function RecruiterDashboard() {
               <h3 className="font-bold mb-2">Pro Hiring Tip 💡</h3>
               <p className="text-sm text-blue-100 leading-relaxed">
                 Candidates who receive a response within 48 hours are 70% more
-                likely to accept an offer. Try to clear your "New&quot; queue
-                today!
+                likely to accept an offer. Try to clear your New queue today!
               </p>
             </div>
           </div>
