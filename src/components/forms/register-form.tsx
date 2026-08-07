@@ -1,33 +1,40 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Building2, Loader2, User } from "lucide-react";
+import { AlertCircle, Building2, Loader2, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+// Redux Hooks (Assuming you have these typed hooks set up)
+import { clearError, registerUser } from "@/redux/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+
+import { toast } from "react-toastify";
+
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// Validation Schema
 const registerSchema = z.object({
-  fullName: z
-    .string()
-    .min(2, { message: "Name must be at least 2 characters" }),
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters" }),
-  role: z.enum(["CANDIDATE", "EMPLOYER"]),
+  fullName: z.string().min(2, "Name is required"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  role: z.enum(["seeker", "recruiter"]),
 });
 
 type FormData = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
+  const router = useRouter();
   // const { toast } = useToast();
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+  // Redux State
+  const dispatch = useAppDispatch();
+  const { isLoading, error } = useAppSelector((state) => state.auth);
 
   const {
     register,
@@ -37,73 +44,89 @@ export function RegisterForm() {
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(registerSchema),
-    defaultValues: {
-      role: "CANDIDATE",
-    },
+    defaultValues: { role: "seeker" },
   });
 
   const selectedRole = watch("role");
 
-  async function onSubmit(data: FormData) {
-    setIsLoading(true);
-    try {
-      console.log("Registering user:", data);
+  // Clear Redux error when user changes inputs
+  React.useEffect(() => {
+    if (error) dispatch(clearError());
+  }, [watch("email"), watch("password")]);
 
-      // Simulate API Call to your separate backend
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+  const onSubmit = async (data: FormData) => {
+    // Dispatch the Redux Async Thunk
+    const resultAction = await dispatch(registerUser(data));
 
-      // Toaster({
-      //   title: "Account created!",
-      //   description: `Welcome to HireFlow, ${data.fullName}!`,
-      // });
-    } catch (error) {
-      // Toaster({
-      //   variant: "destructive",
-      //   title: "Registration failed",
-      //   description: "Something went wrong. Please try again.",
-      // });
-    } finally {
-      setIsLoading(false);
+    if (registerUser.fulfilled.match(resultAction)) {
+      toast.success("Acount Created successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      router.push("/onboarding");
+    } else {
+      toast.error("Something went wrong", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
-  }
+  };
 
   return (
     <div className="grid gap-6">
+      {/* Show Error from Redux Backend */}
+      {error && (
+        <Alert
+          variant="destructive"
+          className="rounded-xl bg-red-50 dark:bg-red-900/20"
+        >
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-4">
-          {/* Role Selector */}
           <div className="grid gap-2">
             <Label>I am a...</Label>
             <Tabs
-              defaultValue="CANDIDATE"
+              defaultValue="seeker"
               className="w-full"
-              onValueChange={(value) =>
-                setValue("role", value as "CANDIDATE" | "EMPLOYER")
+              onValueChange={(v) =>
+                setValue("role", v as "seeker" | "recruiter")
               }
             >
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger
-                  value="CANDIDATE"
-                  className="flex items-center gap-2"
-                >
+              <TabsList className="grid w-full grid-cols-2 h-12 rounded-xl p-1">
+                <TabsTrigger value="seeker" className="rounded-lg gap-2">
                   <User className="h-4 w-4" /> Candidate
                 </TabsTrigger>
-                <TabsTrigger
-                  value="EMPLOYER"
-                  className="flex items-center gap-2"
-                >
+                <TabsTrigger value="recruiter" className="rounded-lg gap-2">
                   <Building2 className="h-4 w-4" /> Employer
                 </TabsTrigger>
               </TabsList>
             </Tabs>
           </div>
 
-          {/* Full Name */}
           <div className="grid gap-2">
             <Label htmlFor="fullName">Full Name</Label>
             <Input
               id="fullName"
               placeholder="John Doe"
+              className="rounded-xl h-11"
               disabled={isLoading}
               {...register("fullName")}
             />
@@ -112,13 +135,13 @@ export function RegisterForm() {
             )}
           </div>
 
-          {/* Email */}
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
-              placeholder="name@example.com"
               type="email"
+              placeholder="name@example.com"
+              className="rounded-xl h-11"
               disabled={isLoading}
               {...register("email")}
             />
@@ -127,13 +150,13 @@ export function RegisterForm() {
             )}
           </div>
 
-          {/* Password */}
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
               type="password"
               placeholder="••••••••"
+              className="rounded-xl h-11"
               disabled={isLoading}
               {...register("password")}
             />
@@ -142,11 +165,17 @@ export function RegisterForm() {
             )}
           </div>
 
-          <Button disabled={isLoading} className="mt-2">
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {selectedRole === "CANDIDATE"
-              ? "Join as Candidate"
-              : "Join as Employer"}
+          <Button
+            disabled={isLoading}
+            className="mt-2 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 font-bold"
+          >
+            {isLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : selectedRole === "seeker" ? (
+              "Join as Candidate"
+            ) : (
+              "Join as Employer"
+            )}
           </Button>
         </div>
       </form>
