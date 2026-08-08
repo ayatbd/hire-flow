@@ -11,7 +11,7 @@ import * as z from "zod";
 import { clearError, registerUser } from "@/redux/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
-import { toast } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -59,7 +59,7 @@ export function RegisterForm() {
     const resultAction = await dispatch(registerUser(data));
 
     if (registerUser.fulfilled.match(resultAction)) {
-      toast.success("Acount Created successfully!", {
+      toast.success("Account Created successfully!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
