@@ -4,12 +4,13 @@ import authReducer from "./features/auth/authSlice";
 
 export const store = configureStore({
     reducer: {
-        [baseApi.reducerPath]: baseApi.reducer,
-        auth: authReducer,
+        [baseApi.reducerPath]: baseApi.reducer, // API Reducer
+        auth: authReducer,                     // Normal Auth Reducer
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(apiSlice.middleware),
+        getDefaultMiddleware().concat(baseApi.middleware),
 });
 
+// Types for TypeScript
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

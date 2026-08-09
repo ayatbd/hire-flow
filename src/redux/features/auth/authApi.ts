@@ -11,13 +11,14 @@ const authApi = baseApi.injectEndpoints({
         }),
         login: builder.mutation({
             query: (credentials) => ({
-                url: "/login", // Changed from /jwt to /login
+                url: "/login",
                 method: "POST",
                 body: credentials,
             }),
         }),
         getMe: builder.query({
             query: () => "/user-info",
+            providesTags: ["User"], // Ties this data to the "User" tag
         }),
     }),
 });

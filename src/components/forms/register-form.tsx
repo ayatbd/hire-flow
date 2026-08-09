@@ -3,15 +3,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, Building2, Loader2, User } from "lucide-react";
 import { useRouter } from "next/navigation";
-import * as React from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import * as z from "zod";
 
-// Redux Hooks (Assuming you have these typed hooks set up)
-import { clearError, registerUser } from "@/redux/features/auth/authSlice";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-
-import { Bounce, toast } from "react-toastify";
+import { useRegisterUserMutation } from "@/redux/features/auth/authApi";
+import { setUser } from "@/redux/features/auth/authSlice";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -30,11 +27,10 @@ type FormData = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
   const router = useRouter();
-  // const { toast } = useToast();
+  const dispatch = useDispatch();
 
-  // Redux State
-  const dispatch = useAppDispatch();
-  const { isLoading, error } = useAppSelector((state) => state.auth);
+  // 1. Properly destructure 'error' from the mutation hook
+  const [registerUser, { isLoading, error }] = useRegisterUserMutation();
 
   const {
     register,
@@ -49,60 +45,42 @@ export function RegisterForm() {
 
   const selectedRole = watch("role");
 
-  // Clear Redux error when user changes inputs
-  React.useEffect(() => {
-    if (error) dispatch(clearError());
-  }, [watch("email"), watch("password")]);
+  const onSubmit = async (values: FormData) => {
+    try {
+      // 2. Use .unwrap() to catch errors in the 'catch' block
+      const response = await registerUser(values).unwrap();
 
-  const onSubmit = async (data: FormData) => {
-    // Dispatch the Redux Async Thunk
-    const resultAction = await dispatch(registerUser(data));
+      // response structure: { user: {...}, token: "..." }
+      dispatch(setUser({ user: response.user, token: response.token }));
 
-    if (registerUser.fulfilled.match(resultAction)) {
-      toast.success("Account Created successfully!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
       router.push("/onboarding");
-    } else {
-      toast.error("Something went wrong", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+    } catch (err) {
+      // Error is handled by the hook's 'error' state
+      console.error("Registration Error:", err);
     }
   };
 
+  // 3. Extract the error message from the RTK Query error object
+  const errorMessage =
+    (error as any)?.data?.message || "An error occurred during registration";
+
   return (
     <div className="grid gap-6">
-      {/* Show Error from Redux Backend */}
+      {/* 4. Show Error if the mutation fails */}
       {error && (
         <Alert
           variant="destructive"
-          className="rounded-xl bg-red-50 dark:bg-red-900/20"
+          className="rounded-xl bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
         >
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription>{errorMessage}</AlertDescription>
         </Alert>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-4">
           <div className="grid gap-2">
-            <Label>I am a...</Label>
+            <Label className="text-sm font-semibold">I am a...</Label>
             <Tabs
               defaultValue="seeker"
               className="w-full"
@@ -110,11 +88,17 @@ export function RegisterForm() {
                 setValue("role", v as "seeker" | "recruiter")
               }
             >
-              <TabsList className="grid w-full grid-cols-2 h-12 rounded-xl p-1">
-                <TabsTrigger value="seeker" className="rounded-lg gap-2">
+              <TabsList className="grid w-full grid-cols-2 h-12 rounded-xl p-1 bg-muted/50">
+                <TabsTrigger
+                  value="seeker"
+                  className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                >
                   <User className="h-4 w-4" /> Candidate
                 </TabsTrigger>
-                <TabsTrigger value="recruiter" className="rounded-lg gap-2">
+                <TabsTrigger
+                  value="recruiter"
+                  className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                >
                   <Building2 className="h-4 w-4" /> Employer
                 </TabsTrigger>
               </TabsList>
@@ -126,12 +110,14 @@ export function RegisterForm() {
             <Input
               id="fullName"
               placeholder="John Doe"
-              className="rounded-xl h-11"
+              className="rounded-xl h-11 focus-visible:ring-blue-600"
               disabled={isLoading}
               {...register("fullName")}
             />
             {errors.fullName && (
-              <p className="text-xs text-red-500">{errors.fullName.message}</p>
+              <p className="text-[12px] font-medium text-red-500">
+                {errors.fullName.message}
+              </p>
             )}
           </div>
 
@@ -141,12 +127,14 @@ export function RegisterForm() {
               id="email"
               type="email"
               placeholder="name@example.com"
-              className="rounded-xl h-11"
+              className="rounded-xl h-11 focus-visible:ring-blue-600"
               disabled={isLoading}
               {...register("email")}
             />
             {errors.email && (
-              <p className="text-xs text-red-500">{errors.email.message}</p>
+              <p className="text-[12px] font-medium text-red-500">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
@@ -156,18 +144,21 @@ export function RegisterForm() {
               id="password"
               type="password"
               placeholder="••••••••"
-              className="rounded-xl h-11"
+              className="rounded-xl h-11 focus-visible:ring-blue-600"
               disabled={isLoading}
               {...register("password")}
             />
             {errors.password && (
-              <p className="text-xs text-red-500">{errors.password.message}</p>
+              <p className="text-[12px] font-medium text-red-500">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
           <Button
+            type="submit"
             disabled={isLoading}
-            className="mt-2 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 font-bold"
+            className="mt-2 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 font-bold transition-all shadow-lg shadow-blue-500/20"
           >
             {isLoading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
