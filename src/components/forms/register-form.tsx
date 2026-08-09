@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as z from "zod";
 
+import { Bounce, toast } from "react-toastify";
+
 import { useRegisterUserMutation } from "@/redux/features/auth/authApi";
 import { setUser } from "@/redux/features/auth/authSlice";
 
@@ -52,6 +54,19 @@ export function RegisterForm() {
 
       // response structure: { user: {...}, token: "..." }
       dispatch(setUser({ user: response.user, token: response.token }));
+
+      // toast.success("Registration successful!");
+      toast.success("Registration successful!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
 
       router.push("/onboarding");
     } catch (err) {

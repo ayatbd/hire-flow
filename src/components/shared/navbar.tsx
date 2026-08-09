@@ -26,6 +26,10 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./theme-toggle"; // We'll create this next
 
+import { logout } from "@/redux/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { Bounce, toast } from "react-toastify";
+
 const navLinks = [
   { title: "Home", href: "/" },
   { title: "Find Jobs", href: "/jobs" },
@@ -38,9 +42,13 @@ export function Navbar() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = React.useState(false);
 
-  // Mock Auth State (Replace with your actual auth logic later)
-  const isLoggedIn = true;
-  const userRole = "CANDIDATE"; // or "EMPLOYER"
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
+
+  // auth logic
+  const isLoggedIn =
+    typeof window !== "undefined" && !!localStorage.getItem("token");
+  // const userRole = "CANDIDATE"; // or "EMPLOYER"
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -49,6 +57,27 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleLogout = () => {
+    try {
+      dispatch(logout());
+      localStorage.removeItem("token");
+
+      toast.success("Logged out successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <header
@@ -135,7 +164,10 @@ export function Navbar() {
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                      <DropdownMenuItem className="text-red-600 cursor-pointer">
+                      <DropdownMenuItem
+                        className="text-red-600 cursor-pointer"
+                        onClick={handleLogout}
+                      >
                         <LogOut className="mr-2 h-4 w-4" /> Log out
                       </DropdownMenuItem>
                     </DropdownMenuGroup>
@@ -160,7 +192,7 @@ export function Navbar() {
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <SheetContent side="right" className="w-75 sm:w-100">
                 <nav className="flex flex-col gap-4 mt-8">
                   {navLinks.map((link) => (
                     <Link
