@@ -1,14 +1,19 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Computer, Loader2 } from "lucide-react";
-import * as React from "react";
+import { AlertCircle, Computer, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLoginMutation } from "@/redux/features/auth/authApi";
+import { setUser } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { useRouter } from "next/router";
+import { Bounce, toast } from "react-toastify";
+import { Alert, AlertDescription } from "../ui/alert";
 
 // Validation Schema
 const loginSchema = z.object({
@@ -22,7 +27,11 @@ type FormData = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   // const { toast } = Toaster();
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  // const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const [login, { isLoading, error }] = useLoginMutation();
 
   const {
     register,
@@ -33,34 +42,45 @@ export function LoginForm() {
   });
 
   async function onSubmit(data: FormData) {
-    setIsLoading(true);
-
     try {
-      // Logic for calling your external Backend API
-      console.log("Submitting to backend:", data);
+      const response = await login(data).unwrap();
+      if (response) {
+        dispatch(setUser({ user: response.user, token: response.token }));
+        router.push("/dashboard");
 
-      // Example Fetch:
-      // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, { ... })
-
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate API delay
-
-      // toast({
-      //   title: "Success!",
-      //   description: "You have been logged in.",
-      // });
-    } catch (error) {
-      // toast({
-      //   variant: "destructive",
-      //   title: "Error",
-      //   description: "Invalid credentials. Please try again.",
-      // });
-    } finally {
-      setIsLoading(false);
+        toast.success("Login successful!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
+    } catch (err) {
+      console.error("Login failed:", err);
     }
   }
 
+  // 3. Extract the error message from the RTK Query error object
+  const errorMessage =
+    (error as any)?.data?.message || "An error occurred during registration";
+
   return (
     <div className="grid gap-6">
+      {/* 4. Show Error if the mutation fails */}
+      {error && (
+        <Alert
+          variant="destructive"
+          className="rounded-xl bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
+        >
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{errorMessage}</AlertDescription>
+        </Alert>
+      )}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-4">
           <div className="grid gap-2">
