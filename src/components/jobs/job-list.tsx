@@ -1,23 +1,35 @@
+"use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useGetJobsQuery } from "@/redux/api/jobsApi";
 import { Bookmark, Building2, Clock, DollarSign, MapPin } from "lucide-react";
 import Link from "next/link";
 
-const MOCK_JOBS = Array(6).fill({
-  id: "1",
-  title: "Senior Full Stack Engineer",
-  company: "TechFlow Systems",
-  location: "Austin, TX (Remote)",
-  salary: "$120k - $160k",
-  type: "Full-time",
-  postedAt: "2 hours ago",
-  tags: ["React", "Node.js", "AWS"],
-});
+// const MOCK_JOBS = Array(6).fill({
+//   id: "1",
+//   title: "Senior Full Stack Engineer",
+//   company: "TechFlow Systems",
+//   location: "Austin, TX (Remote)",
+//   salary: "$120k - $160k",
+//   type: "Full-time",
+//   postedAt: "2 hours ago",
+//   tags: ["React", "Node.js", "AWS"],
+// });
 
 export function JobList() {
+  const { data: jobs, isLoading, error } = useGetJobsQuery(undefined);
+  console.log("Jobs data:", jobs);
+
+  if (isLoading) {
+    return <p>Loading jobs...</p>;
+  }
+
+  if (error) {
+    return <p>Error loading jobs: {error.toString()}</p>;
+  }
   return (
     <div className="grid gap-4">
-      {MOCK_JOBS.map((job, i) => (
+      {jobs?.map((job: any, i: number) => (
         <div
           key={i}
           className="group relative bg-background border rounded-2xl p-5 hover:border-blue-500/50 hover:shadow-md transition-all"

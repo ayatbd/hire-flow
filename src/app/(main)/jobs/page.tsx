@@ -1,3 +1,5 @@
+"use client";
+
 import { JobFilters } from "@/components/jobs/job-filters";
 import { JobList } from "@/components/jobs/job-list";
 import { MobileFilters } from "@/components/jobs/mobile-filters";
@@ -5,7 +7,11 @@ import { Container } from "@/components/shared/container";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 
+import { useGetJobsQuery } from "@/redux/api/jobsApi";
+
 export default function JobsPage() {
+  const { data: jobs, isLoading, error } = useGetJobsQuery(undefined);
+
   return (
     <main className="min-h-screen bg-muted/20 pb-20">
       {/* --- Search Header --- */}
@@ -37,7 +43,9 @@ export default function JobsPage() {
 
           {/* --- Mobile Filter Trigger --- */}
           <div className="lg:hidden flex justify-between items-center mb-4">
-            <p className="text-sm text-muted-foreground">Showing 124 jobs</p>
+            <p className="text-sm text-muted-foreground">
+              Showing {jobs?.length || 0} jobs
+            </p>
             <MobileFilters />
           </div>
 
@@ -45,7 +53,10 @@ export default function JobsPage() {
           <div className="flex-1">
             <div className="hidden lg:flex justify-between items-center mb-6">
               <p className="text-muted-foreground">
-                We found <span className="font-bold text-foreground">124</span>{" "}
+                We found{" "}
+                <span className="font-bold text-foreground">
+                  {jobs?.length || 0}
+                </span>{" "}
                 jobs for you
               </p>
               <select className="bg-transparent text-sm font-medium outline-none cursor-pointer">
