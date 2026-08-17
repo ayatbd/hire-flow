@@ -1,9 +1,9 @@
 "use client";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useGetJobsQuery } from "@/redux/api/jobsApi";
 import { Bookmark, Building2, Clock, DollarSign, MapPin } from "lucide-react";
 import Link from "next/link";
+import { Badge } from "../ui/badge";
 
 // const MOCK_JOBS = Array(6).fill({
 //   id: "1",
@@ -19,7 +19,6 @@ import Link from "next/link";
 export function JobList() {
   const { data: jobs, isLoading, error } = useGetJobsQuery(undefined);
   console.log("Jobs data:", jobs);
-
   if (isLoading) {
     return <p>Loading jobs...</p>;
   }
@@ -43,7 +42,9 @@ export function JobList() {
                 <h3 className="font-bold text-lg group-hover:text-blue-600 transition-colors">
                   <Link href={`/jobs/${job.id}`}>{job.title}</Link>
                 </h3>
-                <p className="text-sm text-muted-foreground">{job.company}</p>
+                <p className="text-sm text-muted-foreground">
+                  {job.company.name}
+                </p>
               </div>
             </div>
             <Button variant="ghost" size="icon" className="rounded-full">
@@ -56,7 +57,8 @@ export function JobList() {
               <MapPin className="h-3.5 w-3.5" /> {job.location}
             </span>
             <span className="flex items-center gap-1">
-              <DollarSign className="h-3.5 w-3.5" /> {job.salary}
+              <DollarSign className="h-3.5 w-3.5" /> {job.salary.max} -{" "}
+              {job.salary.min}
             </span>
             <span className="flex items-center gap-1">
               <Clock className="h-3.5 w-3.5" /> {job.type}
@@ -66,7 +68,7 @@ export function JobList() {
 
           <div className="flex items-center justify-between border-t pt-4">
             <div className="flex gap-2">
-              {job.tags.map((tag) => (
+              {job.skills.map((tag) => (
                 <Badge
                   key={tag}
                   variant="secondary"
