@@ -13,7 +13,10 @@ const companyApi = baseApi.injectEndpoints({
         getCompanyDetails: builder.query({
             query: (id) => `/companies/${id}`,
         }),
+        getCompanyByUserId: builder.query({
+            query: (userId) => `/companies/user/${userId}`,
+        }),
     }),
 });
 
-export const { useCreateCompanyMutation, useGetCompanyDetailsQuery } = companyApi;
+export const { useCreateCompanyMutation, useGetCompanyDetailsQuery, useGetCompanyByUserIdQuery } = companyApi;

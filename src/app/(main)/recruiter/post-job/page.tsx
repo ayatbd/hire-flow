@@ -5,7 +5,6 @@ import { CheckCircle2, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import * as z from "zod";
 
 import { Step1RoleDetails } from "@/components/forms/post-job/step-1";
@@ -15,7 +14,10 @@ import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+import { useGetCompanyByUserIdQuery } from "@/redux/api/companyApi";
 import { useCreateJobMutation } from "@/redux/api/jobsApi";
+import { useAppSelector } from "@/redux/hooks";
+import { toast } from "sonner";
 
 // 1. Validation Schema
 const jobSchema = z.object({
@@ -39,9 +41,21 @@ type JobFormData = z.infer<typeof jobSchema>;
 const STEPS = ["Role Details", "Location & Salary", "Description"];
 
 export default function PostJobPage() {
+  const { user } = useAppSelector((state) => state.auth);
+  console.log(user);
+  const userId = user?._id || ""; // Ensure userId is a string
   const [currentStep, setCurrentStep] = useState(1);
   const router = useRouter();
   const [createJob, { isLoading }] = useCreateJobMutation();
+  const { data: companyData, isLoading: companyLoading } =
+    useGetCompanyByUserIdQuery(userId);
+  const company = companyData?.[0];
+
+  const companyId = company?._id || "";
+  const companyName = company?.name || "";
+  const companyLogo = company?.logo || "";
+
+  console.log(companyName);
 
   // 2. Initialize Form
   const form = useForm<JobFormData>({
@@ -65,16 +79,42 @@ export default function PostJobPage() {
   const prevStep = () => setCurrentStep((prev) => prev - 1);
 
   // 4. Final Submit
-  const onSubmit = async (data: JobFormData) => {
+  const onSubmit = async (values: JobFormData) => {
+    console.log("🚀 Submit Clicked!");
+
     try {
-      await createJob(data).unwrap();
+      if (!companyId || !companyName) {
+        toast.error("Please create your company profile first.");
+        return;
+      }
+
+      // Manually construct the final payload
+      const finalPayload = {
+        ...values,
+        salary: {
+          ...values.salary,
+          min: Number(values.salary.min), // Convert string to number here
+          max: Number(values.salary.max),
+        },
+        company: {
+          id: companyId,
+          name: companyName,
+          logo: companyLogo,
+        },
+        recruiterId: user._id,
+      };
+
+      console.log("📤 Sending to Backend:", finalPayload);
+
+      await createJob(finalPayload).unwrap();
+
       toast.success("Job published successfully!");
       router.push("/recruiter/dashboard");
     } catch (err) {
-      toast.error("Failed to publish job. Please check your details.");
+      console.error("❌ Create job error:", err);
+      toast.error("Failed to publish job.");
     }
   };
-
   const {
     formState: { errors },
   } = form;
@@ -120,7 +160,11 @@ export default function PostJobPage() {
 
         {/* Form Container */}
         <div className="bg-background border rounded-3xl p-8 shadow-sm">
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit, (validationErrors) => {
+              console.log("❌ Form Validation Failed:", validationErrors);
+            })}
+          >
             {currentStep === 1 && <Step1RoleDetails form={form} />}
             {currentStep === 2 && <Step2LocationSalary form={form} />}
             {currentStep === 3 && <Step3Description form={form} />}
@@ -167,6 +211,14 @@ export default function PostJobPage() {
 // Helper to determine which fields to validate per step
 function getFieldsForStep(step: number) {
   if (step === 1) return ["title", "category", "type"];
-  if (step === 2) return ["workMode", "location", "salary.min", "salary.max"];
+  if (step === 2)
+    return [
+      "workMode",
+      "location",
+      "salary.min",
+      "salary.max",
+      "experienceLevel",
+    ]; // Added experienceLevel
+  if (step === 3) return ["description", "skills"]; // Added this for the final check
   return [];
 }

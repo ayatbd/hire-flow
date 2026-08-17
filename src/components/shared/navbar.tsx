@@ -45,6 +45,8 @@ export function Navbar() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
 
+  // console.log(user);
+
   // auth logic
   const isLoggedIn =
     typeof window !== "undefined" && !!localStorage.getItem("token");

@@ -6,6 +6,10 @@ const jobsApi = baseApi.injectEndpoints({
             query: () => "/jobs",
         }),
 
+        getJobById: builder.query({
+            query: (id) => `/jobs/${id}`,
+        }),
+
         createJob: builder.mutation({
             query: (jobData) => ({
                 url: "/jobs",
@@ -17,4 +21,4 @@ const jobsApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useGetJobsQuery, useCreateJobMutation } = jobsApi;
+export const { useGetJobsQuery, useGetJobByIdQuery, useCreateJobMutation } = jobsApi;
