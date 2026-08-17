@@ -1,10 +1,16 @@
+"use client";
+
 import { CompanyCard } from "@/components/companies/company-card";
 import { CompanyFilters } from "@/components/companies/company-filters";
 import { Container } from "@/components/shared/container";
 import { Input } from "@/components/ui/input";
+import { useGetCompaniesQuery } from "@/redux/api/companyApi";
 import { Search } from "lucide-react";
 
 export default function CompaniesPage() {
+  const { data: companyData, isLoading: companyLoading } =
+    useGetCompaniesQuery("");
+  console.log(companyData);
   return (
     <main className="min-h-screen bg-muted/20 pb-20">
       {/* --- Header Section --- */}
@@ -50,8 +56,8 @@ export default function CompaniesPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
-              {MOCK_COMPANIES.map((company) => (
-                <CompanyCard key={company.id} company={company} />
+              {companyData?.map((company: any) => (
+                <CompanyCard key={company._id} company={company} />
               ))}
             </div>
           </div>
@@ -61,45 +67,45 @@ export default function CompaniesPage() {
   );
 }
 
-const MOCK_COMPANIES = [
-  {
-    id: "1",
-    name: "Vercel",
-    industry: "Cloud Computing",
-    location: "San Francisco, CA",
-    openRoles: 12,
-    logo: "V",
-    color: "bg-black",
-    bio: "The platform for frontend developers, providing the speed and reliability needed to create at the speed of inspiration.",
-  },
-  {
-    id: "2",
-    name: "Stripe",
-    industry: "Fintech",
-    location: "Dublin, IE",
-    openRoles: 24,
-    logo: "S",
-    color: "bg-indigo-600",
-    bio: "Financial infrastructure for the internet. Millions of companies use Stripe’s software and APIs to accept payments.",
-  },
-  {
-    id: "3",
-    name: "Airbnb",
-    industry: "Travel & Hospitality",
-    location: "San Francisco, CA",
-    openRoles: 8,
-    logo: "A",
-    color: "bg-rose-500",
-    bio: "Airbnb is a mission-driven company focused on enabling anyone to feel at home anywhere.",
-  },
-  {
-    id: "4",
-    name: "Linear",
-    industry: "Software",
-    location: "Remote",
-    openRoles: 5,
-    logo: "L",
-    color: "bg-purple-600",
-    bio: "The tool for modern software teams. Streamline software projects, sprints, and bug tracking.",
-  },
-];
+// const MOCK_COMPANIES = [
+//   {
+//     id: "1",
+//     name: "Vercel",
+//     industry: "Cloud Computing",
+//     location: "San Francisco, CA",
+//     openRoles: 12,
+//     logo: "V",
+//     color: "bg-black",
+//     bio: "The platform for frontend developers, providing the speed and reliability needed to create at the speed of inspiration.",
+//   },
+//   {
+//     id: "2",
+//     name: "Stripe",
+//     industry: "Fintech",
+//     location: "Dublin, IE",
+//     openRoles: 24,
+//     logo: "S",
+//     color: "bg-indigo-600",
+//     bio: "Financial infrastructure for the internet. Millions of companies use Stripe’s software and APIs to accept payments.",
+//   },
+//   {
+//     id: "3",
+//     name: "Airbnb",
+//     industry: "Travel & Hospitality",
+//     location: "San Francisco, CA",
+//     openRoles: 8,
+//     logo: "A",
+//     color: "bg-rose-500",
+//     bio: "Airbnb is a mission-driven company focused on enabling anyone to feel at home anywhere.",
+//   },
+//   {
+//     id: "4",
+//     name: "Linear",
+//     industry: "Software",
+//     location: "Remote",
+//     openRoles: 5,
+//     logo: "L",
+//     color: "bg-purple-600",
+//     bio: "The tool for modern software teams. Streamline software projects, sprints, and bug tracking.",
+//   },
+// ];

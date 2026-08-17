@@ -43,7 +43,7 @@ export function CompanyCard({ company }: CompanyCardProps) {
       </div>
 
       <p className="text-sm text-muted-foreground line-clamp-2 mb-6">
-        {company.bio}
+        {company.description}
       </p>
 
       <Button

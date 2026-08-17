@@ -10,6 +10,9 @@ const companyApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["User"], // Refresh user data to show they now have a company
         }),
+        getCompanies: builder.query({
+            query: () => "/companies",
+        }),
         getCompanyDetails: builder.query({
             query: (id) => `/companies/${id}`,
         }),
@@ -19,4 +22,4 @@ const companyApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useCreateCompanyMutation, useGetCompanyDetailsQuery, useGetCompanyByUserIdQuery } = companyApi;
+export const { useCreateCompanyMutation, useGetCompaniesQuery, useGetCompanyDetailsQuery, useGetCompanyByUserIdQuery } = companyApi;

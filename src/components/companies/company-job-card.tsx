@@ -24,7 +24,6 @@ export function CompanyJobCard({
       <Button
         variant="ghost"
         className="rounded-xl group-hover:bg-blue-50 group-hover:text-blue-600"
-        asChild
       >
         <Link href="/jobs/1">
           Details <ArrowRight className="ml-2 h-4 w-4" />
