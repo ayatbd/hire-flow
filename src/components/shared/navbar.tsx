@@ -36,7 +36,7 @@ const navLinks = [
   { title: "Browse Companies", href: "/companies" },
   { title: "Salaries", href: "/salaries" },
 ];
-const recruiterNavLinks = [{ title: "Post a Job", href: "/post-job" }];
+// const recruiterNavLinks = [{ title: "Post a Job", href: "/post-job" }];
 
 export function Navbar() {
   const pathname = usePathname();
@@ -44,14 +44,11 @@ export function Navbar() {
 
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
-  const isRecruiter = user?.role === "RECRUITER";
+  const isLoggedIn = !!user;
+  const isRecruiter = user?.role === "recruiter";
 
   console.log(user);
   console.log(isRecruiter);
-
-  // auth logic
-  const isLoggedIn =
-    typeof window !== "undefined" && !!localStorage.getItem("token");
   // const userRole = "CANDIDATE"; // or "EMPLOYER"
 
   React.useEffect(() => {
@@ -123,10 +120,10 @@ export function Navbar() {
 
             {isRecruiter && (
               <Link
-                href="/post-job"
+                href="/recruiter/post-job"
                 className={cn(
                   "transition-colors hover:text-blue-600",
-                  pathname === "/post-job"
+                  pathname === "/recruiter/post-job"
                     ? "text-blue-600"
                     : "text-muted-foreground",
                 )}
@@ -221,6 +218,15 @@ export function Navbar() {
                       {link.title}
                     </Link>
                   ))}
+
+                  {isRecruiter && (
+                    <Link
+                      href="/recruiter/post-job"
+                      className="text-lg font-semibold border-b pb-2"
+                    >
+                      Post a Job
+                    </Link>
+                  )}
                   {!isLoggedIn && (
                     <div className="flex flex-col gap-3 mt-4">
                       <Button variant="outline">
