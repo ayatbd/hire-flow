@@ -35,8 +35,8 @@ const navLinks = [
   { title: "Find Jobs", href: "/jobs" },
   { title: "Browse Companies", href: "/companies" },
   { title: "Salaries", href: "/salaries" },
-  { title: "Post a Job", href: "/recruiter/post-job" },
 ];
+const recruiterNavLinks = [{ title: "Post a Job", href: "/post-job" }];
 
 export function Navbar() {
   const pathname = usePathname();
@@ -44,8 +44,10 @@ export function Navbar() {
 
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
+  const isRecruiter = user?.role === "RECRUITER";
 
-  // console.log(user);
+  console.log(user);
+  console.log(isRecruiter);
 
   // auth logic
   const isLoggedIn =
@@ -118,6 +120,20 @@ export function Navbar() {
                 {link.title}
               </Link>
             ))}
+
+            {isRecruiter && (
+              <Link
+                href="/post-job"
+                className={cn(
+                  "transition-colors hover:text-blue-600",
+                  pathname === "/post-job"
+                    ? "text-blue-600"
+                    : "text-muted-foreground",
+                )}
+              >
+                Post a Job
+              </Link>
+            )}
           </nav>
 
           {/* --- Actions (Theme, Auth, Mobile Menu) --- */}

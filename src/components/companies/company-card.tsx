@@ -15,10 +15,10 @@ export function CompanyCard({ company }: CompanyCardProps) {
         <div
           className={cn(
             "h-16 w-16 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-inner",
-            company.color,
+            company.color || "bg-blue-600",
           )}
         >
-          {company.logo}
+          {company.logo || company.name.charAt(0).toUpperCase()}
         </div>
         <Badge
           variant="secondary"
