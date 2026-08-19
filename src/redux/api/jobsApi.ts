@@ -3,7 +3,23 @@ import { baseApi } from "@/redux/api/baseApi";
 const jobsApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getJobs: builder.query({
-            query: () => "/jobs",
+            query: (params) => {
+                // Generate an object of URL search params
+                const queryParams = new URLSearchParams();
+
+                if (params.keyword) queryParams.append("keyword", params.keyword);
+                if (params.page) queryParams.append("page", params.page.toString());
+
+                // Convert arrays ['Full-time', 'Contract'] -> "Full-time,Contract"
+                if (params.type?.length) queryParams.append("type", params.type.join(","));
+                if (params.experience?.length) queryParams.append("experience", params.experience.join(","));
+
+                return {
+                    url: `/jobs?${queryParams.toString()}`,
+                    method: "GET",
+                };
+            },
+            providesTags: ["Job"],
         }),
 
         getJobById: builder.query({

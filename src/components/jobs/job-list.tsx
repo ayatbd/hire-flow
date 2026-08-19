@@ -1,31 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { useGetJobsQuery } from "@/redux/api/jobsApi";
 import { Bookmark, Building2, Clock, DollarSign, MapPin } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "../ui/badge";
 
-// const MOCK_JOBS = Array(6).fill({
-//   id: "1",
-//   title: "Senior Full Stack Engineer",
-//   company: "TechFlow Systems",
-//   location: "Austin, TX (Remote)",
-//   salary: "$120k - $160k",
-//   type: "Full-time",
-//   postedAt: "2 hours ago",
-//   tags: ["React", "Node.js", "AWS"],
-// });
-
-export function JobList() {
-  const { data: jobs, isLoading, error } = useGetJobsQuery(undefined);
-  console.log("Jobs data:", jobs);
-  if (isLoading) {
-    return <p>Loading jobs...</p>;
-  }
-
-  if (error) {
-    return <p>Error loading jobs: {error.toString()}</p>;
-  }
+export function JobList({ jobs }: any) {
+  // console.log(jobs);
   return (
     <div className="grid gap-4">
       {jobs?.map((job: any, i: number) => (

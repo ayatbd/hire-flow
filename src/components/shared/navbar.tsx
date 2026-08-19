@@ -162,7 +162,11 @@ export function Navbar() {
                     <DropdownMenuGroup>
                       <DropdownMenuItem>
                         <Link
-                          href="/dashboard"
+                          href={
+                            isRecruiter
+                              ? "/recruiter/dashboard"
+                              : "/seeker/dashboard"
+                          }
                           className="cursor-pointer flex items-center w-full"
                         >
                           <User className="mr-2 h-4 w-4" /> Dashboard
