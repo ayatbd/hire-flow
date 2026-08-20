@@ -2,7 +2,9 @@
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import { useGetJobByIdQuery } from "@/redux/api/jobsApi";
+import { useAppSelector } from "@/redux/hooks";
 import { Bookmark, Building2, ChevronLeft, MapPin, Share2 } from "lucide-react";
+import moment from "moment";
 import Link from "next/link";
 import { use } from "react";
 
@@ -12,35 +14,13 @@ export default function JobDetailsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const { user } = useAppSelector((state) => state.auth);
+  const isRecruiter = user?.role === "recruiter";
+  console.log(isRecruiter);
 
   const { data: jobData, isLoading, isError } = useGetJobByIdQuery(id);
   const job = jobData?.company;
-  // {
-  //   company: {
-  //     id: '6a85f03641ccdd607a0c0044',
-  //     name: 'InterEx Group',
-  //     logo:
-  //       'https://ui-avatars.com/api/?name=InterEx Group&background=6366f1&color=fff'
-  //   },
-  //   salary: { min: 1000, max: 1200, currency: 'USD', isNegotiable: false },
-  //   _id: '6a85f2b941ccdd607a0c0051',
-  //   title: 'React Developer',
-  //   description: 'Describe the role, responsibilities, and why someone should join.',
-  //   recruiterId: '6a85eff841ccdd607a0c0041',
-  //   category: 'Engineering',
-  //   type: 'Full-time',
-  //   workMode: 'Remote',
-  //   location: 'New York, USA',
-  //   experienceLevel: 'Mid Level',
-  //   skills: [ 'Javascript' ],
-  //   requirements: [],
-  //   benefits: [],
-  //   applicantsCount: 0,
-  //   status: 'active',
-  //   createdAt: '2026-08-19T18:15:21.692Z',
-  //   updatedAt: '2026-08-19T18:15:21.692Z',
-  //   __v: 0
-  // }
+  //day moment
   const {
     title,
     type,
@@ -56,7 +36,7 @@ export default function JobDetailsPage({
     createdAt,
     applicantsCount,
   } = jobData || {};
-  console.log(title);
+  // console.log(title);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -137,7 +117,9 @@ export default function JobDetailsPage({
                 <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">
                   Date Posted
                 </p>
-                <p className="font-semibold text-sm">{createdAt}</p>
+                <p className="font-semibold text-sm">
+                  {moment(createdAt).startOf("day").fromNow()}
+                </p>
               </div>
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">
@@ -155,14 +137,25 @@ export default function JobDetailsPage({
               dangerouslySetInnerHTML={{ __html: description }}
             />
 
-            <div className="flex gap-4 border-t pt-10">
-              <Button
-                size="lg"
-                className="px-10 bg-blue-600 hover:bg-blue-700 h-14 text-lg"
-              >
-                Apply for this job
-              </Button>
-            </div>
+            {isRecruiter ? (
+              <div className="flex gap-4">
+                <Button variant="outline" className="bg-blue-600 text-white">
+                  Edit Job
+                </Button>
+                <Button variant="outline" className="bg-red-600 text-white">
+                  Delete Job
+                </Button>
+              </div>
+            ) : (
+              <div className="flex gap-4 border-t pt-10">
+                <Button
+                  size="lg"
+                  className="px-10 bg-blue-600 hover:bg-blue-700 h-14 text-lg"
+                >
+                  Apply for this job
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* --- RIGHT COLUMN: SIDEBAR --- */}

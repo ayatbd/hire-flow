@@ -9,6 +9,37 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+const jobCategories = [
+  {
+    value: "Engineering",
+    label: "Engineering",
+  },
+  {
+    value: "Design",
+    label: "Design",
+  },
+  {
+    value: "Product",
+    label: "Product",
+  },
+  {
+    value: "Marketing",
+    label: "Marketing",
+  },
+  {
+    value: "Sales",
+    label: "Sales",
+  },
+  {
+    value: "Data Science",
+    label: "Data Science",
+  },
+  {
+    value: "DevOps",
+    label: "DevOps",
+  },
+];
+
 export function Step1RoleDetails({ form }: { form: any }) {
   const {
     register,
@@ -39,9 +70,11 @@ export function Step1RoleDetails({ form }: { form: any }) {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Engineering">Engineering</SelectItem>
-              <SelectItem value="Design">Design</SelectItem>
-              <SelectItem value="Product">Product</SelectItem>
+              {jobCategories.map((category) => (
+                <SelectItem key={category.value} value={category.value}>
+                  {category.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           {errors.category && (
