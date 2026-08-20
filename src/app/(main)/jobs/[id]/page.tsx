@@ -1,37 +1,70 @@
+"use client";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
+import { useGetJobByIdQuery } from "@/redux/api/jobsApi";
 import { Bookmark, Building2, ChevronLeft, MapPin, Share2 } from "lucide-react";
 import Link from "next/link";
+import { use } from "react";
 
-export default function JobDetailPage({ params }: { params: { id: string } }) {
-  // Mock Data (In a real app, fetch this based on params.id)
-  const job = {
-    title: "Senior Full Stack Developer",
-    company: "Vercel",
-    location: "Remote (Global)",
-    salary: "$140,000 - $190,000",
-    type: "Full-time",
-    postedAt: "2 days ago",
-    applicants: 45,
-    description: `
-      <h3>About the Role</h3>
-      <p>We are looking for a Senior Full Stack Engineer to join our core team. You will be responsible for building high-performance web applications using Next.js and Node.js.</p>
-      <h3>Responsibilities</h3>
-      <ul>
-        <li>Develop and maintain scalable web applications.</li>
-        <li>Collaborate with cross-functional teams to define and ship new features.</li>
-        <li>Optimize applications for maximum speed and scalability.</li>
-        <li>Write clean, maintainable, and well-documented code.</li>
-      </ul>
-      <h3>Requirements</h3>
-      <ul>
-        <li>5+ years of experience with React and Node.js.</li>
-        <li>Strong understanding of TypeScript and modern CSS.</li>
-        <li>Experience with AWS or similar cloud providers.</li>
-        <li>Excellent communication and problem-solving skills.</li>
-      </ul>
-    `,
-  };
+export default function JobDetailsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+
+  const { data: jobData, isLoading, isError } = useGetJobByIdQuery(id);
+  const job = jobData?.company;
+  // {
+  //   company: {
+  //     id: '6a85f03641ccdd607a0c0044',
+  //     name: 'InterEx Group',
+  //     logo:
+  //       'https://ui-avatars.com/api/?name=InterEx Group&background=6366f1&color=fff'
+  //   },
+  //   salary: { min: 1000, max: 1200, currency: 'USD', isNegotiable: false },
+  //   _id: '6a85f2b941ccdd607a0c0051',
+  //   title: 'React Developer',
+  //   description: 'Describe the role, responsibilities, and why someone should join.',
+  //   recruiterId: '6a85eff841ccdd607a0c0041',
+  //   category: 'Engineering',
+  //   type: 'Full-time',
+  //   workMode: 'Remote',
+  //   location: 'New York, USA',
+  //   experienceLevel: 'Mid Level',
+  //   skills: [ 'Javascript' ],
+  //   requirements: [],
+  //   benefits: [],
+  //   applicantsCount: 0,
+  //   status: 'active',
+  //   createdAt: '2026-08-19T18:15:21.692Z',
+  //   updatedAt: '2026-08-19T18:15:21.692Z',
+  //   __v: 0
+  // }
+  const {
+    title,
+    type,
+    workMode,
+    location,
+    salary,
+    experienceLevel,
+    description,
+    skills,
+    company,
+    recruiter,
+    recruiterId,
+    createdAt,
+    applicantsCount,
+  } = jobData || {};
+  console.log(title);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    return <p>Failed to load job.</p>;
+  }
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -67,18 +100,18 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
               </div>
               <div className="space-y-2">
                 <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
-                  {job.title}
+                  {title}
                 </h1>
                 <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
                   <Link
-                    href="/companies/1"
+                    href={`/jobs/${job?.company?._id}`}
                     className="font-bold text-foreground hover:text-blue-600 transition-colors"
                   >
-                    {job.company}
+                    {company?.name}
                   </Link>
                   <span>•</span>
                   <span className="flex items-center gap-1">
-                    <MapPin className="h-4 w-4" /> {job.location}
+                    <MapPin className="h-4 w-4" /> {location}
                   </span>
                 </div>
               </div>
@@ -90,26 +123,28 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
                 <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">
                   Salary
                 </p>
-                <p className="font-semibold text-sm">{job.salary}</p>
+                <p className="font-semibold text-sm">
+                  {salary?.max} - {salary?.min}
+                </p>
               </div>
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">
                   Job Type
                 </p>
-                <p className="font-semibold text-sm">{job.type}</p>
+                <p className="font-semibold text-sm">{type}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">
                   Date Posted
                 </p>
-                <p className="font-semibold text-sm">{job.postedAt}</p>
+                <p className="font-semibold text-sm">{createdAt}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">
                   Applicants
                 </p>
                 <p className="font-semibold text-sm">
-                  {job.applicants} applied
+                  {applicantsCount} applied
                 </p>
               </div>
             </div>
@@ -117,7 +152,7 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
             {/* Job Description (Using Tailwind Typography) */}
             <div
               className="prose prose-blue dark:prose-invert max-w-none mb-10"
-              dangerouslySetInnerHTML={{ __html: job.description }}
+              dangerouslySetInnerHTML={{ __html: description }}
             />
 
             <div className="flex gap-4 border-t pt-10">

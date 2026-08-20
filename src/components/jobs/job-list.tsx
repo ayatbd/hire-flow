@@ -6,6 +6,14 @@ import { Badge } from "../ui/badge";
 
 export function JobList({ jobs }: any) {
   // console.log(jobs);
+  if (!jobs || jobs.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <Clock className="h-10 w-10 text-muted-foreground" />
+        <p className="text-muted-foreground">No jobs found</p>
+      </div>
+    );
+  }
   return (
     <div className="grid gap-4">
       {jobs?.map((job: any, i: number) => (
@@ -59,7 +67,7 @@ export function JobList({ jobs }: any) {
               ))}
             </div>
             <Button>
-              <Link href={`/jobs/${job.id}`}>View Details</Link>
+              <Link href={`/jobs/${job._id}`}>View Details</Link>
             </Button>
           </div>
         </div>

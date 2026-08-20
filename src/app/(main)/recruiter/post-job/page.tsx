@@ -43,33 +43,28 @@ const STEPS = ["Role Details", "Location & Salary", "Description"];
 
 export default function PostJobPage() {
   const { user } = useAppSelector((state) => state.auth);
-  // console.log(user);
-  // const userId = user?._id || "";
+  console.log(user);
+  const userId = user?._id || ""; // Ensure userId is a string
   const [currentStep, setCurrentStep] = useState(1);
   const router = useRouter();
   const [createJob, { isLoading }] = useCreateJobMutation();
-  const { data: companyData, isLoading: isCompanyLoading } =
-    useGetCompanyByUserIdQuery(user?._id as string, { skip: !user?._id });
-  const company = companyData && companyData.length > 0 ? companyData[0] : null;
+  const { data: companyData, isLoading: companyLoading } =
+    useGetCompanyByUserIdQuery(userId);
+  const company = companyData?.[0];
 
   const companyId = company?._id || "";
   const companyName = company?.name || "";
   const companyLogo = company?.logo || "";
 
-  console.log(companyData);
+  console.log(companyName);
 
   // 2. Initialize Form
   const form = useForm<JobFormData>({
     resolver: zodResolver(jobSchema),
     defaultValues: {
-      title: "",
-      category: "",
       type: "Full-time",
       workMode: "Remote",
-      location: "",
-      salary: { min: "0" as any, max: "0" as any, currency: "USD" },
-      experienceLevel: "",
-      description: "",
+      salary: { currency: "USD" },
       skills: [],
     },
   });
@@ -86,30 +81,41 @@ export default function PostJobPage() {
 
   // 4. Final Submit
   const onSubmit = async (values: JobFormData) => {
-    if (!company?._id) {
-      toast.error("Company profile not found. Please create one first.");
-      return;
-    }
+    console.log("🚀 Submit Clicked!");
 
     try {
-      // The 'values' here are already validated and transformed by Zod
+      if (!companyId || !companyName) {
+        toast.error("Please create your company profile first.");
+        return;
+      }
+
+      // Manually construct the final payload
       const finalPayload = {
         ...values,
-        company: company._id, // Usually backend expects ID string
-        // If your backend specifically needs the object, use:
-        // companyDetails: { id: company._id, name: company.name, logo: company.logo },
-        recruiterId: user?._id,
+        salary: {
+          ...values.salary,
+          min: Number(values.salary.min), // Convert string to number here
+          max: Number(values.salary.max),
+        },
+        company: {
+          id: companyId,
+          name: companyName,
+          logo: companyLogo,
+        },
+        recruiterId: user._id,
       };
 
+      console.log("📤 Sending to Backend:", finalPayload);
+
       await createJob(finalPayload).unwrap();
+
       toast.success("Job published successfully!");
       router.push("/recruiter/dashboard");
-    } catch (err: any) {
+    } catch (err) {
       console.error("❌ Create job error:", err);
-      toast.error(err?.data?.message || "Failed to publish job.");
+      toast.error("Failed to publish job.");
     }
   };
-
   const {
     formState: { errors },
   } = form;
@@ -119,14 +125,6 @@ export default function PostJobPage() {
       console.log("❌ Validation Errors:", errors);
     }
   }, [errors]);
-
-  if (isCompanyLoading) {
-    return (
-      <div className="flex justify-center py-20">
-        <Loader2 className="animate-spin" />
-      </div>
-    );
-  }
 
   return (
     <RecruiterOnly>

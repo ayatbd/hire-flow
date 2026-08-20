@@ -24,6 +24,7 @@ const jobsApi = baseApi.injectEndpoints({
 
         getJobById: builder.query({
             query: (id) => `/jobs/${id}`,
+            providesTags: ["Job"],
         }),
 
         createJob: builder.mutation({
