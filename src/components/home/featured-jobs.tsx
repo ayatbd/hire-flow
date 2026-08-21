@@ -34,6 +34,7 @@ const featuredJobs = [
 ];
 
 export function FeaturedJobs() {
+  const { data, isLoading, isFetching } = useGetJobsQuery(params);
   return (
     <section className="container py-24 bg-muted/20 rounded-[3rem] my-10">
       <div className="flex items-end justify-between mb-12">
