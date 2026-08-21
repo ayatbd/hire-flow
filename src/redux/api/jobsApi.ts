@@ -12,7 +12,7 @@ const jobsApi = baseApi.injectEndpoints({
 
                 // Convert arrays ['Full-time', 'Contract'] -> "Full-time,Contract"
                 if (params.type?.length) queryParams.append("type", params.type.join(","));
-                if (params.experience?.length) queryParams.append("experience", params.experience.join(","));
+                if (params.experience?.length) queryParams.append("experienceLevel", params.experience.join(","));
 
                 return {
                     url: `/jobs?${queryParams.toString()}`,

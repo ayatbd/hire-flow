@@ -16,7 +16,7 @@ export default function JobDetailsPage({
   const { id } = use(params);
   const { user } = useAppSelector((state) => state.auth);
   const isRecruiter = user?.role === "recruiter";
-  console.log(isRecruiter);
+  // console.log(isRecruiter);
 
   const { data: jobData, isLoading, isError } = useGetJobByIdQuery(id);
   const job = jobData?.company;

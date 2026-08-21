@@ -10,7 +10,7 @@ import { Search } from "lucide-react";
 export default function CompaniesPage() {
   const { data: companyData, isLoading: companyLoading } =
     useGetCompaniesQuery("");
-  console.log(companyData);
+  // console.log(companyData);
   return (
     <main className="min-h-screen bg-muted/20 pb-20">
       {/* --- Header Section --- */}
@@ -46,7 +46,7 @@ export default function CompaniesPage() {
           <div className="flex-1">
             <div className="flex justify-between items-center mb-6">
               <p className="text-muted-foreground font-medium">
-                Showing 48 companies
+                Showing {companyData?.length} companies
               </p>
               <select className="bg-transparent text-sm font-semibold outline-none border rounded-md px-2 py-1">
                 <option>Most Popular</option>
@@ -66,46 +66,3 @@ export default function CompaniesPage() {
     </main>
   );
 }
-
-// const MOCK_COMPANIES = [
-//   {
-//     id: "1",
-//     name: "Vercel",
-//     industry: "Cloud Computing",
-//     location: "San Francisco, CA",
-//     openRoles: 12,
-//     logo: "V",
-//     color: "bg-black",
-//     bio: "The platform for frontend developers, providing the speed and reliability needed to create at the speed of inspiration.",
-//   },
-//   {
-//     id: "2",
-//     name: "Stripe",
-//     industry: "Fintech",
-//     location: "Dublin, IE",
-//     openRoles: 24,
-//     logo: "S",
-//     color: "bg-indigo-600",
-//     bio: "Financial infrastructure for the internet. Millions of companies use Stripe’s software and APIs to accept payments.",
-//   },
-//   {
-//     id: "3",
-//     name: "Airbnb",
-//     industry: "Travel & Hospitality",
-//     location: "San Francisco, CA",
-//     openRoles: 8,
-//     logo: "A",
-//     color: "bg-rose-500",
-//     bio: "Airbnb is a mission-driven company focused on enabling anyone to feel at home anywhere.",
-//   },
-//   {
-//     id: "4",
-//     name: "Linear",
-//     industry: "Software",
-//     location: "Remote",
-//     openRoles: 5,
-//     logo: "L",
-//     color: "bg-purple-600",
-//     bio: "The tool for modern software teams. Streamline software projects, sprints, and bug tracking.",
-//   },
-// ];

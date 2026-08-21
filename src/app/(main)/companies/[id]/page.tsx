@@ -1,8 +1,11 @@
+"use client";
 import { CompanyJobCard } from "@/components/companies/company-job-card";
 import { Container } from "@/components/shared/container";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { useGetCompanyDetailsQuery } from "@/redux/api/companyApi";
 import {
   Bird,
   Building2,
@@ -14,25 +17,48 @@ import {
   MapPin,
   Zap,
 } from "lucide-react";
+import { use } from "react";
 
-export default function CompanyDetailPage() {
-  // Mock Data
-  const company = {
-    name: "Linear",
-    description:
-      "Linear is a purpose-built tool for modern software teams to streamline projects, sprints, and bug tracking. It's designed to be high-performance, beautiful, and easy to use.",
-    industry: "Software / SaaS",
-    size: "50-200 employees",
-    location: "Remote / San Francisco",
-    website: "https://linear.app",
-    logo: "L",
-    color: "bg-purple-600",
-    stats: [
-      { label: "Open Roles", value: "12" },
-      { label: "Series", value: "B" },
-      { label: "Remote", value: "Yes" },
-    ],
-  };
+export default function CompanyDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+  const {
+    data: companyData,
+    isLoading,
+    isError,
+  } = useGetCompanyDetailsQuery(id);
+  // destructure companyData
+  const {
+    name,
+    logo,
+    website,
+    location,
+    industry,
+    description,
+    admins,
+    createdAt,
+  } = companyData || {};
+  console.log(companyData);
+
+  // const company = {
+  //   name: "Linear",
+  //   description:
+  //     "Linear is a purpose-built tool for modern software teams to streamline projects, sprints, and bug tracking. It's designed to be high-performance, beautiful, and easy to use.",
+  //   industry: "Software / SaaS",
+  //   size: "50-200 employees",
+  //   location: "Remote / San Francisco",
+  //   website: "https://linear.app",
+  //   logo: "L",
+  //   color: "bg-purple-600",
+  //   stats: [
+  //     { label: "Open Roles", value: "12" },
+  //     { label: "Series", value: "B" },
+  //     { label: "Remote", value: "Yes" },
+  //   ],
+  // };
 
   return (
     <main className="min-h-screen bg-background pb-20">
@@ -44,15 +70,15 @@ export default function CompanyDetailPage() {
           <div className="flex items-end gap-6">
             {/* Logo */}
             <div
-              className={`h-32 w-32 rounded-3xl ${company.color} border-4 border-background shadow-xl flex items-center justify-center text-white text-5xl font-bold`}
+              className={`h-32 w-32 rounded-3xl border-4 border-background shadow-xl flex items-center justify-center text-white text-5xl font-bold`}
             >
-              {company.logo}
+              {logo || name.charAt(0).toUpperCase()}
             </div>
             {/* Title Info */}
             <div className="pb-2">
               <div className="flex items-center gap-3">
                 <h1 className="text-3xl font-extrabold tracking-tight">
-                  {company.name}
+                  {name}
                 </h1>
                 <Badge
                   variant="secondary"
@@ -63,10 +89,10 @@ export default function CompanyDetailPage() {
               </div>
               <div className="flex flex-wrap gap-4 mt-2 text-muted-foreground font-medium">
                 <span className="flex items-center gap-1">
-                  <MapPin className="h-4 w-4" /> {company.location}
+                  <MapPin className="h-4 w-4" /> {location}
                 </span>
                 <span className="flex items-center gap-1">
-                  <Building2 className="h-4 w-4" /> {company.industry}
+                  <Building2 className="h-4 w-4" /> {industry}
                 </span>
               </div>
             </div>
@@ -99,7 +125,7 @@ export default function CompanyDetailPage() {
               value="jobs"
               className="rounded-none border-b-2 border-transparent data-[state=active]:border-blue-600 data-[state=active]:bg-transparent pb-4 px-0 font-bold"
             >
-              Open Jobs ({company.stats[0].value})
+              {/* Open Jobs ({company.stats[0].value}) */}
             </TabsTrigger>
             <TabsTrigger
               value="culture"
@@ -115,10 +141,10 @@ export default function CompanyDetailPage() {
               <TabsContent value="about" className="mt-0 space-y-12">
                 <section>
                   <h3 className="text-xl font-bold mb-4">
-                    About {company.name}
+                    About {name}
                   </h3>
                   <p className="text-muted-foreground leading-relaxed text-lg">
-                    {company.description}
+                    {description}
                   </p>
                 </section>
 
@@ -176,7 +202,11 @@ export default function CompanyDetailPage() {
                   At a Glance
                 </h4>
                 <div className="space-y-6">
-                  {company.stats.map((stat) => (
+                  {[
+                    { label: "Open Roles", value: "12" },
+                    { label: "Series", value: "B" },
+                    { label: "Remote", value: "Yes" }
+                  ].map((stat) => (
                     <div key={stat.label}>
                       <p className="text-2xl font-bold">{stat.value}</p>
                       <p className="text-sm text-muted-foreground">
@@ -189,7 +219,7 @@ export default function CompanyDetailPage() {
                       variant="link"
                       className="p-0 h-auto text-blue-600 flex items-center gap-2"
                     >
-                      <a href={company.website} target="_blank">
+                      <a href={website} target="_blank">
                         <Globe className="h-4 w-4" /> Visit Website
                       </a>
                     </Button>

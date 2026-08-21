@@ -50,7 +50,7 @@ export function CompanyCard({ company }: CompanyCardProps) {
         variant="outline"
         className="w-full group-hover:bg-blue-600 group-hover:text-white transition-all"
       >
-        <Link href={`/companies/${company.id}`}>View Profile</Link>
+        <Link href={`/companies/${company._id}`}>View Profile</Link>
       </Button>
     </div>
   );
