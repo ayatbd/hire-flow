@@ -35,6 +35,7 @@ const jobSchema = z.object({
   experienceLevel: z.string().min(1, "Please select experience level"),
   description: z.string().min(20, "Description is too short"),
   skills: z.array(z.string()).min(1, "Add at least one skill"),
+  isFeatured: z.boolean().default(false),
 });
 
 type JobFormData = z.infer<typeof jobSchema>;
@@ -42,6 +43,7 @@ type JobFormData = z.infer<typeof jobSchema>;
 const STEPS = ["Role Details", "Location & Salary", "Description"];
 
 export default function PostJobPage() {
+  const [error, setError] = useState<string | null>(null);
   const { user } = useAppSelector((state) => state.auth);
   console.log(user);
   const userId = user?._id || ""; // Ensure userId is a string
@@ -56,7 +58,7 @@ export default function PostJobPage() {
   const companyName = company?.name || "";
   const companyLogo = company?.logo || "";
 
-  console.log(companyName);
+  // console.log(companyName);
 
   // 2. Initialize Form
   const form = useForm<JobFormData>({
@@ -103,6 +105,7 @@ export default function PostJobPage() {
           logo: companyLogo,
         },
         recruiterId: user._id,
+        isFeatured: false,
       };
 
       console.log("📤 Sending to Backend:", finalPayload);
@@ -123,6 +126,7 @@ export default function PostJobPage() {
   React.useEffect(() => {
     if (Object.keys(errors).length > 0) {
       console.log("❌ Validation Errors:", errors);
+      setError(Object.values(errors)[0]?.message || "");
     }
   }, [errors]);
 
@@ -133,6 +137,9 @@ export default function PostJobPage() {
           {/* Progress Tracker */}
           <div className="mb-12">
             <h1 className="text-3xl font-bold mb-8">Post a New Job</h1>
+            {/* show error */}
+            <p>{error}</p>
+
             <div className="flex items-center justify-between relative">
               <div className="absolute top-1/2 left-0 w-full h-0.5 bg-muted -translate-y-1/2 -z-10" />
               {STEPS.map((step, i) => (
