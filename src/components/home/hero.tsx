@@ -4,20 +4,106 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
-import { Briefcase, MapPin, Search, Sparkles } from "lucide-react";
+import { Briefcase, MapPin, Search, Sparkles, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+
+const locations = [
+  "Dhaka",
+  "Chattogram",
+  "Sylhet",
+  "Rajshahi",
+  "Khulna",
+  "Barishal",
+  "Rangpur",
+  "Mymensingh",
+  "New York",
+  "Los Angeles",
+  "London",
+  "Dubai",
+  "Riyadh",
+  "Jeddah",
+  "Remote",
+];
+
+const popularTags = [
+  "Frontend",
+  "Backend",
+  "Fullstack",
+  "DevOps",
+  "AI Engineer",
+];
 
 export function Hero() {
+  const [title, setKeyword] = useState("");
+  const [location, setLocation] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const locationRef = useRef(null);
+
+  // Filter locations according to user's input
+  const filteredLocations = locations.filter((item) =>
+    item.toLowerCase().includes(location.toLowerCase()),
+  );
+
+  // Close location suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (locationRef.current && !locationRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Select location
+  const handleSelectLocation = (selectedLocation) => {
+    setLocation(selectedLocation);
+    setShowSuggestions(false);
+  };
+
+  // Search jobs
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+
+    if (title.trim()) {
+      params.set("title", title.trim());
+    }
+
+    if (location.trim()) {
+      params.set("location", location.trim());
+    }
+
+    window.location.href = `/jobs?${params.toString()}`;
+  };
+
+  // Popular keyword click
+  const handlePopularTag = (tag) => {
+    setKeyword(tag);
+  };
+
+  // Clear location
+  const clearLocation = () => {
+    setLocation("");
+    setShowSuggestions(true);
+  };
+
   return (
     <section className="relative w-full pt-20 pb-16 md:pt-32 md:pb-24 overflow-hidden">
-      {/* --- Background Decorative Elements --- */}
+      {/* Background Decorative Elements */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-500/10 blur-[120px]" />
+
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-500/10 blur-[120px]" />
       </div>
 
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center text-center space-y-8">
-          {/* --- Announcement Badge --- */}
+          {/* Announcement Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -25,31 +111,32 @@ export function Hero() {
           >
             <Badge
               variant="secondary"
-              className="px-4 py-1.5 py-1 border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300"
+              className="px-4 py-1 border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300"
             >
               <Sparkles className="h-3.5 w-3.5 mr-2 fill-blue-700" />
               AI-Powered Job Matching is here
             </Badge>
           </motion.div>
 
-          {/* --- Main Headline --- */}
+          {/* Main Headline */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="space-y-4 max-w-[800px]"
+            className="space-y-4 max-w-200"
           >
             <h1 className="text-4xl font-extrabold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
               Find Your Next <span className="text-blue-600">Career Move</span>{" "}
               In Tech
             </h1>
-            <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl dark:text-gray-400">
+
+            <p className="mx-auto max-w-150 text-muted-foreground md:text-xl dark:text-gray-400">
               Discover thousands of job opportunities from top-tier tech
               companies. Your dream role is just one click away.
             </p>
           </motion.div>
 
-          {/* --- Modern Search Bar --- */}
+          {/* Search Bar */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -60,26 +147,89 @@ export function Hero() {
               {/* Job Title Input */}
               <div className="relative flex-1 w-full">
                 <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+
                 <Input
+                  value={title}
+                  onChange={(e) => setKeyword(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSearch();
+                    }
+                  }}
                   placeholder="Job title or keywords"
                   className="w-full pl-10 border-none bg-transparent focus-visible:ring-0 text-base"
                 />
               </div>
 
-              <div className="hidden md:block w-[1px] h-8 bg-border" />
+              <div className="hidden md:block w-px h-8 bg-border" />
 
               {/* Location Input */}
-              <div className="relative flex-1 w-full">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <div ref={locationRef} className="relative flex-1 w-full">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground z-10" />
+
                 <Input
+                  value={location}
+                  onChange={(e) => {
+                    setLocation(e.target.value);
+                    setShowSuggestions(true);
+                  }}
+                  onFocus={() => setShowSuggestions(true)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSearch();
+                    }
+                  }}
                   placeholder="Location (Remote, NY, etc.)"
-                  className="w-full pl-10 border-none bg-transparent focus-visible:ring-0 text-base"
+                  className="w-full pl-10 pr-10 border-none bg-transparent focus-visible:ring-0 text-base"
                 />
+
+                {/* Clear Location */}
+                {location && (
+                  <button
+                    type="button"
+                    onClick={clearLocation}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+
+                {/* Location Suggestions */}
+                {showSuggestions &&
+                  location &&
+                  filteredLocations.length > 0 && (
+                    <div className="absolute left-0 right-0 top-full mt-2 z-50 overflow-hidden rounded-xl border bg-background shadow-xl">
+                      {filteredLocations.map((item) => (
+                        <button
+                          key={item}
+                          type="button"
+                          onClick={() => handleSelectLocation(item)}
+                          className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-muted transition-colors"
+                        >
+                          <MapPin className="h-4 w-4 text-muted-foreground" />
+
+                          <span className="text-sm">{item}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                {/* No results */}
+                {showSuggestions &&
+                  location &&
+                  filteredLocations.length === 0 && (
+                    <div className="absolute left-0 right-0 top-full mt-2 z-50 rounded-xl border bg-background p-4 shadow-xl">
+                      <p className="text-sm text-muted-foreground">
+                        No location found.
+                      </p>
+                    </div>
+                  )}
               </div>
 
               {/* Search Button */}
               <Button
                 size="lg"
+                onClick={handleSearch}
                 className="w-full md:w-auto px-8 bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300"
               >
                 <Search className="h-5 w-5 mr-2" />
@@ -90,15 +240,12 @@ export function Hero() {
             {/* Popular Tags */}
             <div className="flex flex-wrap items-center justify-center gap-2 mt-4 text-sm text-muted-foreground">
               <span>Popular:</span>
-              {[
-                "Frontend",
-                "Backend",
-                "Fullstack",
-                "DevOps",
-                "AI Engineer",
-              ].map((tag) => (
+
+              {popularTags.map((tag) => (
                 <button
                   key={tag}
+                  type="button"
+                  onClick={() => handlePopularTag(tag)}
                   className="px-3 py-1 bg-muted/50 hover:bg-blue-100 hover:text-blue-700 dark:hover:bg-blue-900/30 rounded-full transition-colors"
                 >
                   {tag}
@@ -107,7 +254,7 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* --- Stats / Social Proof --- */}
+          {/* Stats */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -124,6 +271,7 @@ export function Hero() {
                 <span className="text-2xl font-bold text-blue-600">
                   {stat.value}
                 </span>
+
                 <span className="text-sm text-muted-foreground">
                   {stat.label}
                 </span>

@@ -72,7 +72,7 @@ export default function CompanyDetailPage({
             <div
               className={`h-32 w-32 rounded-3xl border-4 border-background shadow-xl flex items-center justify-center text-white text-5xl font-bold`}
             >
-              {logo || name.charAt(0).toUpperCase()}
+              {logo || name?.charAt(0).toUpperCase()}
             </div>
             {/* Title Info */}
             <div className="pb-2">
