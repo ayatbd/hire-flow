@@ -35,7 +35,11 @@ const jobsApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["Job"],
         }),
+        browsByCategory: builder.query({
+            query: (category) => `/jobs/category/${category}`,
+            providesTags: ["Job"],
+        })
     }),
 });
 
-export const { useGetJobsQuery, useGetJobByIdQuery, useCreateJobMutation } = jobsApi;
+export const { useGetJobsQuery, useGetJobByIdQuery, useCreateJobMutation, useBrowsByCategoryQuery } = jobsApi;

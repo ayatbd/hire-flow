@@ -1,40 +1,51 @@
+"use client";
+import Loader from "@/app/loading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useGetJobsQuery } from "@/redux/api/jobsApi";
 import { Clock, DollarSign, MapPin } from "lucide-react";
 import Link from "next/link";
 
-const featuredJobs = [
-  {
-    id: 1,
-    title: "Senior Frontend Engineer",
-    company: "Vercel",
-    location: "Remote",
-    salary: "$140k - $190k",
-    type: "Full-time",
-    tags: ["React", "Next.js", "TS"],
-  },
-  {
-    id: 2,
-    title: "Backend Developer",
-    company: "Stripe",
-    location: "New York",
-    salary: "$150k - $210k",
-    type: "Hybrid",
-    tags: ["Node.js", "Go", "Postgres"],
-  },
-  {
-    id: 3,
-    title: "Product Designer",
-    company: "Airbnb",
-    location: "San Francisco",
-    salary: "$130k - $180k",
-    type: "Full-time",
-    tags: ["Figma", "UI/UX", "Research"],
-  },
-];
+// const featuredJobs = [
+//   {
+//     id: 1,
+//     title: "Senior Frontend Engineer",
+//     company: "Vercel",
+//     location: "Remote",
+//     salary: "$140k - $190k",
+//     type: "Full-time",
+//     tags: ["React", "Next.js", "TS"],
+//   },
+//   {
+//     id: 2,
+//     title: "Backend Developer",
+//     company: "Stripe",
+//     location: "New York",
+//     salary: "$150k - $210k",
+//     type: "Hybrid",
+//     tags: ["Node.js", "Go", "Postgres"],
+//   },
+//   {
+//     id: 3,
+//     title: "Product Designer",
+//     company: "Airbnb",
+//     location: "San Francisco",
+//     salary: "$130k - $180k",
+//     type: "Full-time",
+//     tags: ["Figma", "UI/UX", "Research"],
+//   },
+// ];
 
 export function FeaturedJobs() {
-  const { data, isLoading, isFetching } = useGetJobsQuery(params);
+  const { data, isLoading, isFetching } = useGetJobsQuery("");
+  // filter data by featured jobs
+  const featuredData =
+    data?.jobs?.filter((job: any) => job.isFeatured === true) || [];
+  console.log("featuredData", featuredData);
+
+  if (isLoading || isFetching) {
+    return <Loader />;
+  }
   return (
     <section className="container py-24 bg-muted/20 rounded-[3rem] my-10">
       <div className="flex items-end justify-between mb-12">
@@ -52,9 +63,10 @@ export function FeaturedJobs() {
       </div>
 
       <div className="grid gap-4">
-        {featuredJobs.map((job) => (
+        {/* 3 featured jobs */}
+        {featuredData?.slice(0, 3).map((job) => (
           <div
-            key={job.id}
+            key={job._id}
             className="group bg-background border p-6 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-all hover:border-blue-500/50 hover:shadow-md"
           >
             <div className="flex gap-4">
@@ -70,7 +82,8 @@ export function FeaturedJobs() {
                     <MapPin className="h-3.5 w-3.5" /> {job.location}
                   </span>
                   <span className="flex items-center gap-1">
-                    <DollarSign className="h-3.5 w-3.5" /> {job.salary}
+                    <DollarSign className="h-3.5 w-3.5" /> {job.salary.currency}{" "}
+                    {job.salary.min} - {job.salary.max}
                   </span>
                   <span className="flex items-center gap-1">
                     <Clock className="h-3.5 w-3.5" /> {job.type}
@@ -79,7 +92,7 @@ export function FeaturedJobs() {
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              {job.tags.map((tag) => (
+              {job.skills?.map((tag) => (
                 <Badge
                   key={tag}
                   variant="secondary"

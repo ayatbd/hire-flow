@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Code2, Cpu, Database, Globe, Layout, Palette } from "lucide-react";
+import React from "react";
 
 const categories = [
   {
@@ -62,9 +63,9 @@ export function JobCategories() {
           >
             <div className="flex flex-col h-full justify-between">
               <div className="p-3 w-fit rounded-2xl bg-background shadow-sm group-hover:scale-110 transition-transform">
-                {/* {React.cloneElement(cat.icon as React.ReactElement, {
+                {React.cloneElement(cat.icon as React.ReactElement, {
                   className: "w-6 h-6 text-blue-600",
-                })} */}
+                })}
                 5
               </div>
               <div>
