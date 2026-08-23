@@ -1,4 +1,5 @@
 "use client";
+import { ApplyModal } from "@/components/application/ApplyModal";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import { useGetJobByIdQuery } from "@/redux/api/jobsApi";
@@ -104,7 +105,7 @@ export default function JobDetailsPage({
                   Salary
                 </p>
                 <p className="font-semibold text-sm">
-                  {salary?.max} - {salary?.min}
+                  {salary?.min} - {salary?.max}
                 </p>
               </div>
               <div className="space-y-1">
@@ -150,12 +151,13 @@ export default function JobDetailsPage({
               <div className="flex gap-4 border-t pt-10">
                 {user ? (
                   <Link href={`/jobs/${job?.id}/apply`}>
-                    <Button
+                    <ApplyModal job={job} user={user} />
+                    {/* <Button
                       size="lg"
                       className="px-10 bg-blue-600 hover:bg-blue-700 h-14 text-lg"
                     >
                       Apply for this job
-                    </Button>
+                    </Button> */}
                   </Link>
                 ) : (
                   <Link href="/login">

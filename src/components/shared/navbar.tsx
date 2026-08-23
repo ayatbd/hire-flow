@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Bell,
-  BriefcaseBusiness,
-  LogOut,
-  Menu,
-  Settings,
-  User,
-} from "lucide-react";
+import { BriefcaseBusiness, LogOut, Menu, Settings, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
@@ -29,6 +22,7 @@ import { ThemeToggle } from "./theme-toggle"; // We'll create this next
 import { logout } from "@/redux/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Bounce, toast } from "react-toastify";
+import { NotificationDropdown } from "../notification/NotificationDropdown";
 
 const navLinks = [
   { title: "Home", href: "/" },
@@ -140,7 +134,7 @@ export function Navbar() {
             {isLoggedIn ? (
               <div className="flex items-center gap-3">
                 <Button variant="ghost" size="icon" className="hidden sm:flex">
-                  <Bell className="h-5 w-5" />
+                  <NotificationDropdown />
                 </Button>
 
                 <DropdownMenu>
