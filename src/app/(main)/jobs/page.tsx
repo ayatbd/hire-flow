@@ -22,7 +22,13 @@ export default function JobsPage() {
   });
 
   // 2. RTK Query Hook - Fired automatically when 'params' changes
-  const { data, isLoading, isFetching } = useGetJobsQuery(params);
+  const { data, isLoading, isFetching } = useGetJobsQuery({
+    keyword: params.keyword,
+    page: params.page,
+    type: params.type, // Array from state
+    experience: params.experience, // Array from state
+    minSalary: params.minSalary,
+  });
 
   // Helper to update specific filters
   const updateFilter = (key: string, value: any) => {
