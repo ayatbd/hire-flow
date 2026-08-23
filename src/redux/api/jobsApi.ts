@@ -4,15 +4,23 @@ const jobsApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getJobs: builder.query({
             query: (params) => {
-                // Generate an object of URL search params
                 const queryParams = new URLSearchParams();
 
                 if (params.keyword) queryParams.append("keyword", params.keyword);
                 if (params.page) queryParams.append("page", params.page.toString());
 
-                // Convert arrays ['Full-time', 'Contract'] -> "Full-time,Contract"
-                if (params.type?.length) queryParams.append("type", params.type.join(","));
-                if (params.experience?.length) queryParams.append("experienceLevel", params.experience.join(","));
+                // Match the key names to the backend exactly
+                if (params.type?.length) {
+                    queryParams.append("type", params.type.join(","));
+                }
+
+                if (params.experience?.length) {
+                    // Send as 'experienceLevel' to match backend destructuring
+                    queryParams.append("experienceLevel", params.experience.join(","));
+                }
+
+                if (params.minSalary) queryParams.append("minSalary", params.minSalary);
+                if (params.maxSalary) queryParams.append("maxSalary", params.maxSalary);
 
                 return {
                     url: `/jobs?${queryParams.toString()}`,
