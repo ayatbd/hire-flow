@@ -150,15 +150,7 @@ export default function JobDetailsPage({
             ) : (
               <div className="flex gap-4 border-t pt-10">
                 {user ? (
-                  <Link href={`/jobs/${job?.id}/apply`}>
-                    <ApplyModal job={job} user={user} />
-                    {/* <Button
-                      size="lg"
-                      className="px-10 bg-blue-600 hover:bg-blue-700 h-14 text-lg"
-                    >
-                      Apply for this job
-                    </Button> */}
-                  </Link>
+                  <ApplyModal job={job} user={user} />
                 ) : (
                   <Link href="/login">
                     <Button

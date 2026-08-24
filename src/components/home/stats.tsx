@@ -26,7 +26,7 @@ const stats = [
 export function Stats() {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-      {stats.map((stat, i) => (
+      {stats.map((stat: any, i: number) => (
         <div key={i} className="flex flex-col items-center p-6 text-center">
           <div className="mb-4 p-3 rounded-2xl bg-blue-50 dark:bg-blue-950">
             {stat.icon}

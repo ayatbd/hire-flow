@@ -20,7 +20,7 @@ export default function OnboardingPage() {
       <Container className="max-w-2xl">
         {/* --- Progress Indicator --- */}
         <div className="flex gap-2 mb-12 justify-center">
-          {[1, 2, 3].map((i) => (
+          {[1, 2, 3].map((i: number) => (
             <div
               key={i}
               className={`h-1.5 w-16 rounded-full transition-all duration-500 ${
@@ -31,7 +31,7 @@ export default function OnboardingPage() {
         </div>
 
         {/* --- Step Container with Animation --- */}
-        <div className="relative overflow-hidden min-h-[400px]">
+        <div className="relative overflow-hidden min-h-100">
           <AnimatePresence mode="wait">
             <motion.div
               key={step}

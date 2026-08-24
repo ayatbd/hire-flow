@@ -64,7 +64,7 @@ export function FeaturedJobs() {
 
       <div className="grid gap-4">
         {/* 3 featured jobs */}
-        {featuredData?.slice(0, 3).map((job) => (
+        {featuredData?.slice(0, 3).map((job: any) => (
           <div
             key={job._id}
             className="group bg-background border p-6 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-all hover:border-blue-500/50 hover:shadow-md"
@@ -92,7 +92,7 @@ export function FeaturedJobs() {
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              {job.skills?.map((tag) => (
+              {job.skills?.map((tag: any) => (
                 <Badge
                   key={tag}
                   variant="secondary"

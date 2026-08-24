@@ -27,7 +27,7 @@ const testimonials = [
 export function Testimonials() {
   return (
     <div className="grid md:grid-cols-3 gap-8">
-      {testimonials.map((t, i) => (
+      {testimonials.map((t: any, i: number) => (
         <div
           key={i}
           className="p-8 rounded-3xl bg-background border shadow-sm hover:shadow-md transition-shadow"

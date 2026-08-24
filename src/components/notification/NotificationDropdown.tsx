@@ -64,7 +64,7 @@ export function NotificationDropdown() {
   return (
     <Popover>
       {/* Trigger */}
-      <PopoverTrigger asChild>
+      <PopoverTrigger>
         <Button
           variant="ghost"
           size="icon"
@@ -209,7 +209,6 @@ export function NotificationDropdown() {
               text-muted-foreground
               hover:text-blue-600
             "
-            asChild
           >
             <Link href="/">View all notifications</Link>
           </Button>

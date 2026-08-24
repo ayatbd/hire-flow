@@ -38,7 +38,7 @@ export function Hero() {
   const [location, setLocation] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  const locationRef = useRef(null);
+  const locationRef = useRef<HTMLDivElement>(null);
 
   // Filter locations according to user's input
   const filteredLocations = locations.filter((item) =>
@@ -47,8 +47,12 @@ export function Hero() {
 
   // Close location suggestions when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (locationRef.current && !locationRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        locationRef.current &&
+        event.target instanceof Node &&
+        !locationRef.current.contains(event.target)
+      ) {
         setShowSuggestions(false);
       }
     };
@@ -61,7 +65,7 @@ export function Hero() {
   }, []);
 
   // Select location
-  const handleSelectLocation = (selectedLocation) => {
+  const handleSelectLocation = (selectedLocation: any) => {
     setLocation(selectedLocation);
     setShowSuggestions(false);
   };
@@ -82,7 +86,7 @@ export function Hero() {
   };
 
   // Popular keyword click
-  const handlePopularTag = (tag) => {
+  const handlePopularTag = (tag: any) => {
     setKeyword(tag);
   };
 

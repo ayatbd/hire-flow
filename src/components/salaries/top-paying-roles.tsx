@@ -14,7 +14,7 @@ export function TopPayingRoles() {
         <TrendingUp className="h-5 w-5 text-green-500" /> Top Paying Roles
       </h3>
       <div className="space-y-4">
-        {roles.map((role) => (
+        {roles.map((role: any) => (
           <div
             key={role.name}
             className="flex justify-between items-center p-3 rounded-xl hover:bg-muted/50 transition-colors cursor-default"

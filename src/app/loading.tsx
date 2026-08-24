@@ -2,18 +2,26 @@
 
 import { Loader2 } from "lucide-react";
 
+const sizes = {
+  sm: "h-4 w-4",
+  md: "h-6 w-6",
+  lg: "h-10 w-10",
+  xl: "h-14 w-14",
+};
+
+type LoaderSize = keyof typeof sizes;
+
+interface LoaderProps {
+  size?: LoaderSize;
+  text?: string;
+  fullScreen?: boolean;
+}
+
 export default function Loader({
   size = "md",
   text = "Loading...",
   fullScreen = false,
-}) {
-  const sizes = {
-    sm: "h-4 w-4",
-    md: "h-6 w-6",
-    lg: "h-10 w-10",
-    xl: "h-14 w-14",
-  };
-
+}: LoaderProps) {
   const content = (
     <div className="flex flex-col items-center justify-center gap-3">
       <Loader2 className={`${sizes[size]} animate-spin text-blue-600`} />

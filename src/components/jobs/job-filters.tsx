@@ -22,7 +22,7 @@ export function JobFilters({
           Employment Type
         </h3>
         <div className="space-y-3">
-          {["Full-time", "Part-time", "Contract", "Remote"].map((type) => (
+          {["Full-time", "Part-time", "Contract", "Remote"].map((type: any) => (
             <div key={type} className="flex items-center space-x-2">
               <Checkbox
                 id={type}
@@ -48,7 +48,7 @@ export function JobFilters({
           Experience
         </h3>
         <div className="space-y-3">
-          {["Entry Level", "Mid Level", "Senior", "Lead"].map((exp) => (
+          {["Entry Level", "Mid Level", "Senior", "Lead"].map((exp: any) => (
             <div key={exp} className="flex items-center space-x-2">
               <Checkbox
                 id={exp}

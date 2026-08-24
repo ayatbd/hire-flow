@@ -56,7 +56,7 @@ export function JobList({ jobs }: any) {
 
           <div className="flex items-center justify-between border-t pt-4">
             <div className="flex gap-2">
-              {job.skills.map((tag) => (
+              {job.skills.map((tag: string) => (
                 <Badge
                   key={tag}
                   variant="secondary"

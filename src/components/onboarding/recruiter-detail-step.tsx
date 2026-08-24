@@ -133,7 +133,7 @@ export function RecruiterDetailStep({ onBack }: { onBack: () => void }) {
           {/* Industry - Shadcn Select integration */}
           <div className="grid gap-2">
             <Label>Industry</Label>
-            <Select onValueChange={(v) => setValue("industry", v)}>
+            <Select onValueChange={(v: any) => setValue("industry", v)}>
               <SelectTrigger className="h-12 rounded-xl focus:ring-purple-600">
                 <SelectValue placeholder="Select industry" />
               </SelectTrigger>
@@ -172,7 +172,7 @@ export function RecruiterDetailStep({ onBack }: { onBack: () => void }) {
           <Textarea
             id="description"
             placeholder="A short description of your mission..."
-            className="min-h-[100px] rounded-xl resize-none focus-visible:ring-purple-600"
+            className="min-h-25 rounded-xl resize-none focus-visible:ring-purple-600"
             {...register("description")}
           />
           {errors.description && (

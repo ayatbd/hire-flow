@@ -108,7 +108,7 @@ export function SalaryTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {SALARY_DATA.map((item, i) => (
+            {SALARY_DATA.map((item: any, i: number) => (
               <TableRow
                 key={i}
                 className="hover:bg-muted/30 transition-colors cursor-pointer group"

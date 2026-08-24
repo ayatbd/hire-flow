@@ -12,9 +12,10 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useApplyToJobMutation } from "@/redux/api/applicationApi";
-import { CheckCircle, FileText, Loader2, Sparkles } from "lucide-react";
+import { CheckCircle, Loader2, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { ResumeUpload } from "../resume-upload/ResumeUpload";
 
 export function ApplyModal({ job, user }: { job: any; user: any }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,7 +57,7 @@ export function ApplyModal({ job, user }: { job: any; user: any }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <Button
           size="lg"
           className="px-10 bg-blue-600 hover:bg-blue-700 h-14 text-lg rounded-xl shadow-xl shadow-blue-500/20"
@@ -65,7 +66,7 @@ export function ApplyModal({ job, user }: { job: any; user: any }) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[500px] rounded-3xl p-8">
+      <DialogContent className="sm:max-w-125 rounded-3xl p-8">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
             Apply for {job.title}
@@ -77,13 +78,13 @@ export function ApplyModal({ job, user }: { job: any; user: any }) {
 
         <div className="space-y-6 pt-4">
           {/* Resume Preview Box */}
-          <div className="flex items-center justify-between p-4 bg-muted/30 rounded-2xl border border-dashed">
+          {/* <div className="flex items-center justify-between p-4 bg-muted/30 rounded-2xl border border-dashed">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-white rounded-lg shadow-sm">
                 <FileText className="h-6 w-6 text-blue-600" />
               </div>
               <div className="text-left">
-                <p className="text-sm font-bold truncate max-w-[200px]">
+                <p className="text-sm font-bold truncate max-w-50">
                   {user.fullName}_Resume.pdf
                 </p>
                 <p className="text-xs text-muted-foreground">
@@ -98,7 +99,9 @@ export function ApplyModal({ job, user }: { job: any; user: any }) {
             >
               Change
             </Button>
-          </div>
+          </div> */}
+
+          <ResumeUpload />
 
           {/* Cover Letter Input */}
           <div className="space-y-2">
@@ -114,7 +117,7 @@ export function ApplyModal({ job, user }: { job: any; user: any }) {
             </div>
             <Textarea
               placeholder="Why are you a great fit for this role?"
-              className="min-h-[150px] rounded-2xl resize-none"
+              className="min-h-37.5 rounded-2xl resize-none"
               value={coverLetter}
               onChange={(e) => setCoverLetter(e.target.value)}
             />

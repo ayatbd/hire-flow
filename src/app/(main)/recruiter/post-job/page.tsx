@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -18,6 +17,7 @@ import RecruiterOnly from "@/lib/RecruiterOnly";
 import { useGetCompanyByUserIdQuery } from "@/redux/api/companyApi";
 import { useCreateJobMutation } from "@/redux/api/jobsApi";
 import { useAppSelector } from "@/redux/hooks";
+import { useState } from "react";
 import { toast } from "sonner";
 
 // 1. Validation Schema
@@ -38,12 +38,12 @@ const jobSchema = z.object({
   isFeatured: z.boolean().default(false),
 });
 
-type JobFormData = z.infer<typeof jobSchema>;
+type JobFormInput = z.input<typeof jobSchema>;
+type JobFormData = z.output<typeof jobSchema>;
 
 const STEPS = ["Role Details", "Location & Salary", "Description"];
 
 export default function PostJobPage() {
-  const [error, setError] = useState<string | null>(null);
   const { user } = useAppSelector((state) => state.auth);
   console.log(user);
   const userId = user?._id || ""; // Ensure userId is a string
@@ -61,7 +61,7 @@ export default function PostJobPage() {
   // console.log(companyName);
 
   // 2. Initialize Form
-  const form = useForm<JobFormData>({
+  const form = useForm<JobFormInput, any, JobFormData>({
     resolver: zodResolver(jobSchema),
     defaultValues: {
       type: "Full-time",
@@ -122,13 +122,7 @@ export default function PostJobPage() {
   const {
     formState: { errors },
   } = form;
-
-  React.useEffect(() => {
-    if (Object.keys(errors).length > 0) {
-      console.log("❌ Validation Errors:", errors);
-      setError(Object.values(errors)[0]?.message || "");
-    }
-  }, [errors]);
+  const error = Object.values(errors)[0]?.message;
 
   return (
     <RecruiterOnly>
