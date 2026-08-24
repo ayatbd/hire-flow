@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useGetAllThingsQuery } from "@/redux/api/adminApi";
 import { motion } from "framer-motion";
 import { Briefcase, MapPin, Search, Sparkles, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -37,6 +38,7 @@ export function Hero() {
   const [title, setKeyword] = useState("");
   const [location, setLocation] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const { data: adminThings } = useGetAllThingsQuery("");
 
   const locationRef = useRef<HTMLDivElement>(null);
 
@@ -266,14 +268,20 @@ export function Hero() {
             className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-8 w-full max-w-3xl border-t border-muted"
           >
             {[
-              { label: "Active Jobs", value: "12,000+" },
-              { label: "Companies", value: "450+" },
-              { label: "Candidates", value: "80,000+" },
-              { label: "Hired Monthly", value: "2,500+" },
+              { label: "Active Jobs", value: adminThings?.jobs?.length ?? 0 },
+              {
+                label: "Companies",
+                value: adminThings?.companies?.length ?? 0,
+              },
+              {
+                label: "Candidates",
+                value: adminThings?.applicants?.length ?? 0,
+              },
+              { label: "Hired Monthly", value: "1" },
             ].map((stat) => (
               <div key={stat.label} className="flex flex-col gap-1">
                 <span className="text-2xl font-bold text-blue-600">
-                  {stat.value}
+                  {stat.value > 0 ? String(stat.value).padStart(2, "0") : "0"} +
                 </span>
 
                 <span className="text-sm text-muted-foreground">

@@ -4,30 +4,35 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useApplyToJobMutation } from "@/redux/api/applicationApi";
+import {
+  useApplyToJobMutation,
+  useGetSeekerApplicationsQuery,
+} from "@/redux/api/applicationApi";
 import { CheckCircle, Loader2, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { ResumeUpload } from "../resume-upload/ResumeUpload";
 
 export function ApplyModal({ job, user }: { job: any; user: any }) {
   const [isOpen, setIsOpen] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
   const [apply, { isLoading, isSuccess }] = useApplyToJobMutation();
+  const { data: applications = [] } = useGetSeekerApplicationsQuery("");
+  const hasApplied = applications.some(
+    (application: any) => application.jobId === job._id,
+  );
 
   const handleApply = async () => {
     try {
       await apply({
-        jobId: job._id,
-        recruiterId: job.recruiterId._id,
-        resume: user.resume || "https://placeholder-resume.pdf",
+        jobId: job._id || job.id,
+        recruiterId: job.recruiterId,
+        resume: user.resume,
         coverLetter,
       }).unwrap();
 
@@ -35,6 +40,7 @@ export function ApplyModal({ job, user }: { job: any; user: any }) {
       // Modal remains open to show success state
     } catch (err: any) {
       toast.error(err?.data?.message || "Failed to apply");
+      console.log(err);
     }
   };
 
@@ -58,12 +64,17 @@ export function ApplyModal({ job, user }: { job: any; user: any }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>
-        <Button
-          size="lg"
-          className="px-10 bg-blue-600 hover:bg-blue-700 h-14 text-lg rounded-xl shadow-xl shadow-blue-500/20"
-        >
-          Apply Now
-        </Button>
+        {hasApplied ? (
+          <p className="text-red-500 font-bold">This job is already applied</p>
+        ) : (
+          <Button
+            disabled={hasApplied}
+            size="lg"
+            className="px-10 bg-blue-600 hover:bg-blue-700 h-14 text-lg rounded-xl shadow-xl shadow-blue-500/20"
+          >
+            Apply Now
+          </Button>
+        )}
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-125 rounded-3xl p-8">
@@ -71,9 +82,9 @@ export function ApplyModal({ job, user }: { job: any; user: any }) {
           <DialogTitle className="text-2xl font-bold">
             Apply for {job.title}
           </DialogTitle>
-          <DialogDescription>
+          {/* <DialogDescription>
             Review your details before submitting.
-          </DialogDescription>
+          </DialogDescription> */}
         </DialogHeader>
 
         <div className="space-y-6 pt-4">
@@ -101,7 +112,7 @@ export function ApplyModal({ job, user }: { job: any; user: any }) {
             </Button>
           </div> */}
 
-          <ResumeUpload />
+          {/* <ResumeUpload /> */}
 
           {/* Cover Letter Input */}
           <div className="space-y-2">

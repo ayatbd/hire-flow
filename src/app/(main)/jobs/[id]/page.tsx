@@ -1,7 +1,9 @@
 "use client";
+import Loader from "@/app/loading";
 import { ApplyModal } from "@/components/application/ApplyModal";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
+import { useGetSeekerApplicationsQuery } from "@/redux/api/applicationApi";
 import { useGetJobByIdQuery } from "@/redux/api/jobsApi";
 import { useAppSelector } from "@/redux/hooks";
 import { Bookmark, Building2, ChevronLeft, MapPin, Share2 } from "lucide-react";
@@ -20,27 +22,32 @@ export default function JobDetailsPage({
   // console.log(isRecruiter);
 
   const { data: jobData, isLoading, isError } = useGetJobByIdQuery(id);
+  const { data: applications = [] } = useGetSeekerApplicationsQuery("");
+  const hasApplied = applications.some(
+    (application: any) => application?.jobId === jobData?._id,
+  );
+  // console.log(adminThings);
   const job = jobData?.company;
   //day moment
   const {
     title,
     type,
-    workMode,
+    // workMode,
     location,
     salary,
-    experienceLevel,
+    // experienceLevel,
     description,
-    skills,
+    // skills,
     company,
-    recruiter,
-    recruiterId,
+    // recruiter,
+    // recruiterId,
     createdAt,
     applicantsCount,
   } = jobData || {};
   // console.log(title);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Loader />;
   }
 
   if (isError) {
@@ -150,7 +157,7 @@ export default function JobDetailsPage({
             ) : (
               <div className="flex gap-4 border-t pt-10">
                 {user ? (
-                  <ApplyModal job={job} user={user} />
+                  <ApplyModal job={jobData} user={user} />
                 ) : (
                   <Link href="/login">
                     <Button
@@ -215,7 +222,12 @@ export default function JobDetailsPage({
 
       {/* --- STICKY MOBILE APPLY BAR --- */}
       <div className="fixed bottom-0 left-0 right-0 p-4 border-t bg-background/80 backdrop-blur-md lg:hidden z-50">
-        <Button className="w-full h-12 bg-blue-600">Apply Now</Button>
+        <Button
+          disabled={hasApplied || isLoading}
+          className="w-full h-12 bg-blue-600"
+        >
+          {hasApplied ? "Already Applied" : "Apply Now"}
+        </Button>
       </div>
     </div>
   );

@@ -41,8 +41,6 @@ export function Navbar() {
   const isLoggedIn = !!user;
   const isRecruiter = user?.role === "recruiter";
 
-  console.log(user);
-  console.log(isRecruiter);
   // const userRole = "CANDIDATE"; // or "EMPLOYER"
 
   React.useEffect(() => {
