@@ -1,16 +1,29 @@
 "use client";
 
+import Loader from "@/app/loading";
 import { CompanyCard } from "@/components/companies/company-card";
 import { CompanyFilters } from "@/components/companies/company-filters";
 import { Container } from "@/components/shared/container";
 import { Input } from "@/components/ui/input";
 import { useGetCompaniesQuery } from "@/redux/api/companyApi";
 import { Search } from "lucide-react";
+import { useState } from "react";
 
 export default function CompaniesPage() {
-  const { data: companyData, isLoading: companyLoading } =
-    useGetCompaniesQuery("");
-  // console.log(companyData);
+  const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
+  const [page, setPage] = useState(1);
+  const { data: companyData, isLoading: companyLoading } = useGetCompaniesQuery(
+    {
+      industry: selectedIndustries,
+      page: page,
+    },
+    // { skip: selectedIndustries.length === 0 },
+  );
+
+  const companies = companyData?.companies || [];
+  console.log(companyData);
+
+  if (companyLoading) return <Loader />;
   return (
     <main className="min-h-screen bg-muted/20 pb-20">
       {/* --- Header Section --- */}
@@ -39,7 +52,10 @@ export default function CompaniesPage() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* --- Sidebar Filters --- */}
           <aside className="w-full lg:w-64 shrink-0">
-            <CompanyFilters />
+            <CompanyFilters
+              selectedIndustries={selectedIndustries}
+              onIndustryChange={setSelectedIndustries}
+            />
           </aside>
 
           {/* --- Company Grid --- */}
@@ -56,7 +72,7 @@ export default function CompaniesPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
-              {companyData?.map((company: any) => (
+              {companies?.map((company: any) => (
                 <CompanyCard key={company._id} company={company} />
               ))}
             </div>

@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
 const applicants = [
@@ -27,7 +26,7 @@ export function RecentApplicants() {
     <div className="bg-background border rounded-3xl p-6 shadow-sm">
       <h3 className="font-bold mb-6">Recent Applicants</h3>
       <div className="space-y-6">
-        {applicants.map((person, i) => (
+        {/* {applicants.map((person, i) => (
           <div key={i} className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Avatar className="h-10 w-10 border">
@@ -45,9 +44,10 @@ export function RecentApplicants() {
               {person.time}
             </span>
           </div>
-        ))}
+        ))} */}
+        <p className="text-red-500">No recent applicants</p>
       </div>
-      <Button variant="outline" className="w-full mt-6 rounded-xl">
+      <Button disabled variant="outline" className="w-full mt-6 rounded-xl">
         View All Candidates
       </Button>
     </div>

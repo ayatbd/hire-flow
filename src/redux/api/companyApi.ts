@@ -11,7 +11,19 @@ const companyApi = baseApi.injectEndpoints({
             invalidatesTags: ["User"], // Refresh user data to show they now have a company
         }),
         getCompanies: builder.query({
-            query: () => "/companies",
+            query: (params) => {
+                const queryParams = new URLSearchParams();
+                if (params.industry?.length) queryParams.append("industry", params.industry.join(","));
+                if (params.location) queryParams.append("location", params.location);
+                if (params.keyword) queryParams.append("keyword", params.keyword);
+                if (params.page) queryParams.append("page", params.page.toString());
+
+                return {
+                    url: `/companies?${queryParams.toString()}`,
+                    method: "GET",
+                };
+            },
+            providesTags: ["Company"],
         }),
         getCompanyDetails: builder.query({
             query: (id) => `/companies/${id}`,

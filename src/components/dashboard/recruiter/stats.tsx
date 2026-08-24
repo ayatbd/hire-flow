@@ -4,25 +4,25 @@ import { Briefcase, Clock, UserCheck, Users } from "lucide-react";
 const stats = [
   {
     label: "Active Jobs",
-    value: "12",
+    value: "0",
     icon: <Briefcase className="text-blue-600" />,
     color: "bg-blue-50",
   },
   {
     label: "Total Applicants",
-    value: "284",
+    value: "0",
     icon: <Users className="text-purple-600" />,
     color: "bg-purple-50",
   },
   {
     label: "Interviews",
-    value: "48",
+    value: "0",
     icon: <UserCheck className="text-green-600" />,
     color: "bg-green-50",
   },
   {
     label: "Avg. Time to Hire",
-    value: "18d",
+    value: "0",
     icon: <Clock className="text-orange-600" />,
     color: "bg-orange-50",
   },

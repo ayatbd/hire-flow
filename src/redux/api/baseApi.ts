@@ -13,6 +13,6 @@ export const baseApi = createApi({
             return headers;
         },
     }),
-    tagTypes: ["User", "Job", "Application"], // Used for automatic re-fetching
+    tagTypes: ["User", "Job", "Application", "Company"], // Used for automatic re-fetching
     endpoints: () => ({}), // Empty, we will inject endpoints later
 });

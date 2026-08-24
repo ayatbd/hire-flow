@@ -1,20 +1,10 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MoreHorizontal, Users } from "lucide-react";
 
 const myJobs = [
   {
@@ -65,7 +55,7 @@ export function MyJobsTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {myJobs.map((job) => (
+          {/* {myJobs.map((job) => (
             <TableRow key={job.id} className="group cursor-pointer">
               <TableCell>
                 <div className="font-bold group-hover:text-blue-600 transition-colors">
@@ -111,9 +101,10 @@ export function MyJobsTable() {
                 </DropdownMenu>
               </TableCell>
             </TableRow>
-          ))}
+          ))} */}
         </TableBody>
       </Table>
+      <p className="text-red-500 text-center mt-5">No jobs found</p>
     </div>
   );
 }
