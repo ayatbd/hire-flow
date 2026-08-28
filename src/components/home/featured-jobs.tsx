@@ -41,7 +41,7 @@ export function FeaturedJobs() {
   // filter data by featured jobs
   const featuredData =
     data?.jobs?.filter((job: any) => job.isFeatured === true) || [];
-  console.log("featuredData", featuredData);
+  // console.log("featuredData", featuredData);
 
   if (isLoading || isFetching) {
     return <Loader />;

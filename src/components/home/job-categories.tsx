@@ -1,45 +1,92 @@
+"use client";
 import { cn } from "@/lib/utils";
 import { Code2, Cpu, Database, Globe, Layout, Palette } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 const categories = [
   {
     name: "Development",
+    slug: "Engineering",
     icon: <Code2 />,
     count: "1.2k+",
     className: "md:col-span-2 md:row-span-2 bg-blue-50 dark:bg-blue-950/30",
   },
   {
     name: "Design",
+    slug: "Design",
     icon: <Palette />,
     count: "800+",
     className: "bg-purple-50 dark:bg-purple-950/30",
   },
   {
     name: "Marketing",
+    slug: "Marketing",
     icon: <Globe />,
     count: "450+",
     className: "bg-orange-50 dark:bg-orange-950/30",
   },
   {
     name: "Data Science",
+    slug: "Data Science",
     icon: <Database />,
     count: "600+",
     className: "md:col-span-2 bg-green-50 dark:bg-green-950/30",
   },
   {
     name: "DevOps",
+    slug: "DevOps",
     icon: <Cpu />,
     count: "300+",
     className: "bg-red-50 dark:bg-red-950/30",
   },
   {
     name: "Product",
+    slug: "Product",
     icon: <Layout />,
     count: "500+",
     className: "bg-cyan-50 dark:bg-cyan-950/30",
   },
 ];
+
+// const categories = [
+//   {
+//     name: "Development",
+//     icon: <Code2 />,
+//     count: "1.2k+",
+//     className: "md:col-span-2 md:row-span-2 bg-blue-50 dark:bg-blue-950/30",
+//   },
+//   {
+//     name: "Design",
+//     icon: <Palette />,
+//     count: "800+",
+//     className: "bg-purple-50 dark:bg-purple-950/30",
+//   },
+//   {
+//     name: "Marketing",
+//     icon: <Globe />,
+//     count: "450+",
+//     className: "bg-orange-50 dark:bg-orange-950/30",
+//   },
+//   {
+//     name: "Data Science",
+//     icon: <Database />,
+//     count: "600+",
+//     className: "md:col-span-2 bg-green-50 dark:bg-green-950/30",
+//   },
+//   {
+//     name: "DevOps",
+//     icon: <Cpu />,
+//     count: "300+",
+//     className: "bg-red-50 dark:bg-red-950/30",
+//   },
+//   {
+//     name: "Product",
+//     icon: <Layout />,
+//     count: "500+",
+//     className: "bg-cyan-50 dark:bg-cyan-950/30",
+//   },
+// ];
 
 export function JobCategories() {
   return (
@@ -54,8 +101,10 @@ export function JobCategories() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-45">
         {categories.map((cat, i) => (
-          <div
+          /* Use Link to navigate to the jobs page with the category param */
+          <Link
             key={i}
+            href={`/jobs?category=${cat.slug || cat.name}`}
             className={cn(
               "group relative overflow-hidden rounded-3xl p-8 border transition-all hover:shadow-lg hover:-translate-y-1 cursor-pointer",
               cat.className,
@@ -65,11 +114,8 @@ export function JobCategories() {
               <div className="p-3 w-fit rounded-2xl bg-background shadow-sm group-hover:scale-110 transition-transform">
                 {React.cloneElement(
                   cat.icon as React.ReactElement<{ className?: string }>,
-                  {
-                    className: "w-6 h-6 text-blue-600",
-                  },
+                  { className: "w-6 h-6 text-blue-600" },
                 )}
-                5
               </div>
               <div>
                 <h3 className="font-bold text-xl">{cat.name}</h3>
@@ -78,7 +124,7 @@ export function JobCategories() {
                 </p>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>

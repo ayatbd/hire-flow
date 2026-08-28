@@ -9,6 +9,8 @@ const jobsApi = baseApi.injectEndpoints({
                 if (params.keyword) queryParams.append("keyword", params.keyword);
                 if (params.page) queryParams.append("page", params.page.toString());
 
+                if (params.category) queryParams.append("category", params.category);
+
                 // Match the key names to the backend exactly
                 if (params.type?.length) {
                     queryParams.append("type", params.type.join(","));

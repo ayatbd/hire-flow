@@ -18,7 +18,7 @@ export function CompanyCard({ company }: CompanyCardProps) {
             company.color || "bg-blue-600",
           )}
         >
-          {company.logo || company.name.charAt(0).toUpperCase()}
+          {company.name.charAt(0).toUpperCase()}
         </div>
         <Badge
           variant="secondary"

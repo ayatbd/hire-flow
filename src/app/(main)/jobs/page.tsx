@@ -9,9 +9,12 @@ import { ChevronLeft, ChevronRight, Loader2, Search } from "lucide-react";
 
 import { useGetJobsQuery } from "@/redux/api/jobsApi";
 import { Button } from "@base-ui/react";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export default function JobsPage() {
+  const searchParams = useSearchParams();
+  const categoryFromUrl = searchParams.get("category");
   // 1. Centralized State for all API parameters
   const [params, setParams] = useState({
     page: 1,
@@ -28,6 +31,7 @@ export default function JobsPage() {
     type: params.type, // Array from state
     experience: params.experience, // Array from state
     minSalary: params.minSalary,
+    category: categoryFromUrl || "",
   });
 
   // Helper to update specific filters

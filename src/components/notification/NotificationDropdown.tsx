@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { Bell, Briefcase, Clock, MessageSquare, UserCheck } from "lucide-react";
+import { Bell, Clock, UserCheck } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -16,35 +16,34 @@ import { useState } from "react";
 const MOCK_NOTIFICATIONS = [
   {
     id: "1",
-    type: "application",
-    title: "Application Updated",
-    description:
-      "Your application for Senior React Dev at Vercel is now 'Interviewing'.",
-    time: "2m ago",
+    type: "registration",
+    title: "Registered successfully",
+    description: "You have completed registration successfully",
+    time: "1m ago",
     isRead: false,
     icon: <UserCheck className="h-4 w-4 text-blue-600" />,
     color: "bg-blue-100",
   },
-  {
-    id: "2",
-    type: "job",
-    title: "New Job Match",
-    description: "A new 'Full Stack Engineer' role matches your skills.",
-    time: "1h ago",
-    isRead: false,
-    icon: <Briefcase className="h-4 w-4 text-green-600" />,
-    color: "bg-green-100",
-  },
-  {
-    id: "3",
-    type: "message",
-    title: "New Message",
-    description: "Recruiter from Stripe sent you a message.",
-    time: "5h ago",
-    isRead: true,
-    icon: <MessageSquare className="h-4 w-4 text-purple-600" />,
-    color: "bg-purple-100",
-  },
+  // {
+  //   id: "2",
+  //   type: "job",
+  //   title: "New Job Match",
+  //   description: "A new 'Full Stack Engineer' role matches your skills.",
+  //   time: "1h ago",
+  //   isRead: false,
+  //   icon: <Briefcase className="h-4 w-4 text-green-600" />,
+  //   color: "bg-green-100",
+  // },
+  // {
+  //   id: "3",
+  //   type: "message",
+  //   title: "New Message",
+  //   description: "Recruiter from Stripe sent you a message.",
+  //   time: "5h ago",
+  //   isRead: true,
+  //   icon: <MessageSquare className="h-4 w-4 text-purple-600" />,
+  //   color: "bg-purple-100",
+  // },
 ];
 
 export function NotificationDropdown() {

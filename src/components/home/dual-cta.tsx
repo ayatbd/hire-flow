@@ -18,7 +18,12 @@ export function DualCTA() {
             Join thousands of developers and get discovered by top companies
             worldwide.
           </p>
-          <Button size="lg" variant="secondary" className="group/btn">
+          <Button
+            disabled={user}
+            size="lg"
+            variant="secondary"
+            className="group/btn"
+          >
             <Link href="/register">
               Get Started{" "}
               <UserPlus className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />

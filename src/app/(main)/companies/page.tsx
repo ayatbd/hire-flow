@@ -21,7 +21,6 @@ export default function CompaniesPage() {
   );
 
   const companies = companyData?.companies || [];
-  console.log(companyData);
 
   if (companyLoading) return <Loader />;
   return (
