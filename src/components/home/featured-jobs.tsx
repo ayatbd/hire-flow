@@ -41,7 +41,7 @@ export function FeaturedJobs() {
   // filter data by featured jobs
   const featuredData =
     data?.jobs?.filter((job: any) => job.isFeatured === true) || [];
-  // console.log("featuredData", featuredData);
+  console.log("featuredData", featuredData);
 
   if (isLoading || isFetching) {
     return <Loader />;
@@ -71,7 +71,7 @@ export function FeaturedJobs() {
           >
             <div className="flex gap-4">
               <div className="h-12 w-12 rounded-xl bg-muted flex items-center justify-center font-bold text-blue-600">
-                {job.company[0]}
+                {job?.company?.name?.charAt(0)?.toUpperCase()}
               </div>
               <div className="space-y-1">
                 <h3 className="font-bold text-lg group-hover:text-blue-600 transition-colors">

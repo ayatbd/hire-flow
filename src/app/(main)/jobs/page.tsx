@@ -10,7 +10,7 @@ import { ChevronLeft, ChevronRight, Loader2, Search } from "lucide-react";
 import { useGetJobsQuery } from "@/redux/api/jobsApi";
 import { Button } from "@base-ui/react";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export default function JobsPage() {
   const searchParams = useSearchParams();
@@ -100,31 +100,81 @@ export default function JobsPage() {
 
                 {/* --- Awesome Pagination --- */}
                 {data?.pagination?.totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-4 pt-10">
+                  <div className="flex items-center justify-center gap-2 pt-10">
+                    {/* Previous */}
                     <Button
-                      className="rounded-xl h-12"
+                      variant="outline"
+                      size="icon"
+                      className="h-10 w-10 rounded-lg border-gray-200 bg-white shadow-sm transition-all hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600 disabled:opacity-40"
                       disabled={params.page === 1}
                       onClick={() =>
-                        setParams((p) => ({ ...p, page: p.page - 1 }))
+                        setParams((p) => ({
+                          ...p,
+                          page: p.page - 1,
+                        }))
                       }
                     >
-                      <ChevronLeft className="h-5 w-5 mr-1" /> Previous
+                      <ChevronLeft className="h-5 w-5" />
                     </Button>
 
-                    <div className="flex gap-2">
-                      <span className="h-12 w-12 flex items-center justify-center bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-500/20">
-                        {params.page}
-                      </span>
+                    {/* Page Numbers */}
+                    <div className="flex items-center gap-1.5">
+                      {Array.from(
+                        { length: data.pagination.totalPages },
+                        (_, i) => i + 1,
+                      )
+                        .filter((page) => {
+                          const current = params.page;
+                          const total = data.pagination.totalPages;
+
+                          return (
+                            page === 1 ||
+                            page === total ||
+                            Math.abs(page - current) <= 1
+                          );
+                        })
+                        .map((page, index, pages) => (
+                          <React.Fragment key={page}>
+                            {/* Ellipsis */}
+                            {index > 0 && pages[index - 1] !== page - 1 && (
+                              <span className="flex h-10 w-8 items-center justify-center text-gray-400">
+                                ...
+                              </span>
+                            )}
+
+                            <button
+                              onClick={() =>
+                                setParams((p) => ({
+                                  ...p,
+                                  page,
+                                }))
+                              }
+                              className={`flex h-10 w-10 items-center justify-center rounded-lg text-sm font-semibold transition-all duration-200 ${
+                                params.page === page
+                                  ? "bg-blue-600 text-white shadow-md shadow-blue-500/25"
+                                  : "border border-gray-200 bg-white text-gray-600 hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600"
+                              }`}
+                            >
+                              {page}
+                            </button>
+                          </React.Fragment>
+                        ))}
                     </div>
 
+                    {/* Next */}
                     <Button
-                      className="rounded-xl h-12"
+                      variant="outline"
+                      size="icon"
+                      className="h-10 w-10 rounded-lg border-gray-200 bg-white shadow-sm transition-all hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600 disabled:opacity-40"
                       disabled={!data?.pagination?.hasNextPage}
                       onClick={() =>
-                        setParams((p) => ({ ...p, page: p.page + 1 }))
+                        setParams((p) => ({
+                          ...p,
+                          page: p.page + 1,
+                        }))
                       }
                     >
-                      Next <ChevronRight className="h-5 w-5 ml-1" />
+                      <ChevronRight className="h-5 w-5" />
                     </Button>
                   </div>
                 )}
