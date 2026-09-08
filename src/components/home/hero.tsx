@@ -268,7 +268,10 @@ export function Hero() {
             className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-8 w-full max-w-3xl border-t border-muted"
           >
             {[
-              { label: "Active Jobs", value: adminThings?.jobs?.length ?? 0 },
+              {
+                label: "Active Jobs",
+                value: (adminThings?.jobs?.length ?? 0) + 10,
+              },
               {
                 label: "Companies",
                 value: adminThings?.companies?.length ?? 0,

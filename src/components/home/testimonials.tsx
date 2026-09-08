@@ -4,21 +4,21 @@ const testimonials = [
   {
     quote:
       "Found my Senior React role at a top startup within 2 weeks of joining HireFlow.",
-    author: "Sarah Chen",
+    author: "Md. Siam",
     role: "Frontend Engineer",
     avatar: "S",
   },
   {
     quote:
       "The hiring process was incredibly smooth. We found three great developers in record time.",
-    author: "James Wilson",
-    role: "Tech Lead @ Stripe",
+    author: "Jenifar",
+    role: "Tech Lead @ ridli_soft",
     avatar: "J",
   },
   {
     quote:
       "Best UI of any job board I've ever used. The tracking system is a game changer.",
-    author: "Elena Rodriguez",
+    author: "Rubel Shekh",
     role: "Fullstack Developer",
     avatar: "E",
   },

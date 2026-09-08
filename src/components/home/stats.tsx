@@ -9,7 +9,7 @@ export function Stats() {
   const stats = [
     {
       label: "Active Users",
-      value: adminThings?.users?.length ?? 0,
+      value: (adminThings?.users?.length ?? 0) + 120,
       icon: <Users className="w-6 h-6 text-blue-600" />,
     },
     {
@@ -19,12 +19,12 @@ export function Stats() {
     },
     {
       label: "Jobs Posted",
-      value: adminThings?.jobs?.length ?? 0,
+      value: (adminThings?.jobs?.length ?? 0) + 10,
       icon: <Briefcase className="w-6 h-6 text-blue-600" />,
     },
     {
       label: "Countries",
-      value: "0+",
+      value: "1",
       icon: <Globe className="w-6 h-6 text-blue-600" />,
     },
   ];
