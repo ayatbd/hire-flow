@@ -103,8 +103,6 @@ export default function JobsPage() {
                   <div className="flex items-center justify-center gap-2 pt-10">
                     {/* Previous */}
                     <Button
-                      variant="outline"
-                      size="icon"
                       className="h-10 w-10 rounded-lg border-gray-200 bg-white shadow-sm transition-all hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600 disabled:opacity-40"
                       disabled={params.page === 1}
                       onClick={() =>
@@ -163,8 +161,6 @@ export default function JobsPage() {
 
                     {/* Next */}
                     <Button
-                      variant="outline"
-                      size="icon"
                       className="h-10 w-10 rounded-lg border-gray-200 bg-white shadow-sm transition-all hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600 disabled:opacity-40"
                       disabled={!data?.pagination?.hasNextPage}
                       onClick={() =>

@@ -1,7 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, Building2, Loader2, User } from "lucide-react";
+import {
+  AlertCircle,
+  Building2,
+  Eye,
+  EyeOff,
+  Loader2,
+  User,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -17,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
 
 const registerSchema = z.object({
   fullName: z.string().min(2, "Name is required"),
@@ -30,6 +38,7 @@ type FormData = z.infer<typeof registerSchema>;
 export function RegisterForm() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false);
 
   // 1. Properly destructure 'error' from the mutation hook
   const [registerUser, { isLoading, error }] = useRegisterUserMutation();
@@ -155,19 +164,32 @@ export function RegisterForm() {
 
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              className="rounded-xl h-11 focus-visible:ring-blue-600"
-              disabled={isLoading}
-              {...register("password")}
-            />
-            {errors.password && (
-              <p className="text-[12px] font-medium text-red-500">
-                {errors.password.message}
-              </p>
-            )}
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                className="rounded-xl h-11 focus-visible:ring-blue-600"
+                disabled={isLoading}
+                {...register("password")}
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-1 top-1/2 -translate-y-1/2"
+                onClick={() => setShowPassword((visible) => !visible)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-pressed={showPassword}
+              >
+                {showPassword ? <EyeOff /> : <Eye />}
+              </Button>
+              {errors.password && (
+                <p className="text-[12px] font-medium text-red-500">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
           </div>
 
           <Button

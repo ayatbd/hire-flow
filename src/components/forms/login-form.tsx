@@ -1,8 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -28,6 +29,7 @@ export function LoginForm() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [login, { isLoading, error }] = useLoginMutation();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -92,13 +94,26 @@ export function LoginForm() {
 
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              className="rounded-xl"
-              {...register("password")}
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                className="rounded-xl pr-10"
+                {...register("password")}
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-1 top-1/2 -translate-y-1/2"
+                onClick={() => setShowPassword((visible) => !visible)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-pressed={showPassword}
+              >
+                {showPassword ? <EyeOff /> : <Eye />}
+              </Button>
+            </div>
             {errors.password && (
               <p className="text-xs text-red-500">{errors.password.message}</p>
             )}
