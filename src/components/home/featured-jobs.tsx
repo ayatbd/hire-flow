@@ -1,10 +1,22 @@
 "use client";
 import Loader from "@/app/loading";
+import { ApplyModal } from "@/components/application/ApplyModal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useGetJobsQuery } from "@/redux/api/jobsApi";
+import { useAppSelector } from "@/redux/hooks";
 import { Clock, DollarSign, MapPin } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 // const featuredJobs = [
 //   {
@@ -38,6 +50,8 @@ import Link from "next/link";
 
 export function FeaturedJobs() {
   const { data, isLoading, isFetching } = useGetJobsQuery("");
+  const user = useAppSelector((state) => state.auth.user);
+  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   // filter data by featured jobs
   const featuredData =
     data?.jobs?.filter((job: any) => job.isFeatured === true) || [];
@@ -101,13 +115,39 @@ export function FeaturedJobs() {
                   {tag}
                 </Badge>
               ))}
-              <Button size="sm" className="ml-2">
-                Apply
-              </Button>
+              {user ? (
+                <ApplyModal job={job} user={user} />
+              ) : (
+                <Button
+                  type="button"
+                  size="sm"
+                  className="ml-2"
+                  onClick={() => setIsLoginDialogOpen(true)}
+                >
+                  Apply
+                </Button>
+              )}
             </div>
           </div>
         ))}
       </div>
+
+      <Dialog open={isLoginDialogOpen} onOpenChange={setIsLoginDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Login to apply</DialogTitle>
+            <DialogDescription>
+              Please log in to your HireFlow account before applying for a job.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose render={<Button variant="outline" />}>
+              Cancel
+            </DialogClose>
+            <Button render={<Link href="/login" />}>Login</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Button variant="outline" className="w-full mt-8 sm:hidden">
         View All Jobs
