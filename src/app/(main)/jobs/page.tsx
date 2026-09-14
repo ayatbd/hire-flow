@@ -39,6 +39,11 @@ export default function JobsPage() {
     setParams((prev) => ({ ...prev, [key]: value, page: 1 })); // Reset to page 1 on filter change
   };
 
+  const changePage = (page: number) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setParams((prev) => ({ ...prev, page }));
+  };
+
   return (
     <main className="min-h-screen bg-muted/20 pb-20">
       {/* --- Search Header --- */}
@@ -105,12 +110,7 @@ export default function JobsPage() {
                     <Button
                       className="h-10 w-10 rounded-lg border-gray-200 bg-white shadow-sm transition-all hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600 disabled:opacity-40"
                       disabled={params.page === 1}
-                      onClick={() =>
-                        setParams((p) => ({
-                          ...p,
-                          page: p.page - 1,
-                        }))
-                      }
+                      onClick={() => changePage(params.page - 1)}
                     >
                       <ChevronLeft className="h-5 w-5" />
                     </Button>
@@ -141,12 +141,7 @@ export default function JobsPage() {
                             )}
 
                             <button
-                              onClick={() =>
-                                setParams((p) => ({
-                                  ...p,
-                                  page,
-                                }))
-                              }
+                              onClick={() => changePage(page)}
                               className={`flex h-10 w-10 items-center justify-center rounded-lg text-sm font-semibold transition-all duration-200 ${
                                 params.page === page
                                   ? "bg-blue-600 text-white shadow-md shadow-blue-500/25"
@@ -163,12 +158,7 @@ export default function JobsPage() {
                     <Button
                       className="h-10 w-10 rounded-lg border-gray-200 bg-white shadow-sm transition-all hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600 disabled:opacity-40"
                       disabled={!data?.pagination?.hasNextPage}
-                      onClick={() =>
-                        setParams((p) => ({
-                          ...p,
-                          page: p.page + 1,
-                        }))
-                      }
+                      onClick={() => changePage(params.page + 1)}
                     >
                       <ChevronRight className="h-5 w-5" />
                     </Button>
