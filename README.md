@@ -1,7 +1,3 @@
-Optimized tool selectionI’ll quickly review the project context and draft a concise set of bullet points that reflect what this app is about.
-
-Read 
-
 ## Project overview
 
 - A modern hiring and recruitment platform designed for both job seekers and recruiters.
