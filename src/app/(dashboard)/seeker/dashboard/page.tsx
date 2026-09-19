@@ -1,12 +1,16 @@
+"use client";
 import { ApplicationTracker } from "@/components/dashboard/seeker/application-tracker";
 import { RecommendedJobs } from "@/components/dashboard/seeker/recommended-jobs";
 import { SeekerStats } from "@/components/dashboard/seeker/stats";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
+import { useAppSelector } from "@/redux/hooks";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 
 export default function SeekerDashboard() {
+  // user
+  const { user } = useAppSelector((state) => state.auth);
   return (
     <main className="min-h-screen bg-muted/20 py-10">
       <Container>
@@ -14,7 +18,7 @@ export default function SeekerDashboard() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">
-              Welcome back, Alex! 👋
+              Welcome back, {user?.name || "User"}! 👋
             </h1>
             <p className="text-muted-foreground mt-1">
               Here&apos;s what&apos;s happening with your job search today.

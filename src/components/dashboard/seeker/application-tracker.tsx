@@ -1,7 +1,5 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MoreHorizontal } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const applications = [
   {
@@ -51,7 +49,7 @@ export function ApplicationTracker() {
           <TabsTrigger value="completed">Completed</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="all" className="space-y-4">
+        {/* <TabsContent value="all" className="space-y-4">
           {applications.map((app, i) => (
             <div
               key={i}
@@ -82,7 +80,7 @@ export function ApplicationTracker() {
               </div>
             </div>
           ))}
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
     </div>
   );
