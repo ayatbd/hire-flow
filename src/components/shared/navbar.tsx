@@ -204,7 +204,7 @@ export function Navbar() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-75 sm:w-100">
-                <nav className="flex flex-col gap-4 mt-8">
+                <nav className="flex flex-col gap-4 mt-8 px-6">
                   {navLinks.map((link) => (
                     <Link
                       key={link.href}
