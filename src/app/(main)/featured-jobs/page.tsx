@@ -12,7 +12,7 @@ import { Button } from "@base-ui/react";
 import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 
-export default function JobsPage() {
+export default function FeaturedJobs() {
   const searchParams = useSearchParams();
   const categoryFromUrl = searchParams.get("category");
   // 1. Centralized State for all API parameters
@@ -50,9 +50,7 @@ export default function JobsPage() {
       <div className="bg-background border-b py-8 mb-8">
         <Container>
           <div className="flex flex-col gap-4">
-            <h1 className="text-3xl font-bold tracking-tight">
-              Available Jobs
-            </h1>
+            <h1 className="text-3xl font-bold tracking-tight">Featured Jobs</h1>
             <div className="relative max-w-2xl">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input
