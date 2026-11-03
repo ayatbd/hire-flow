@@ -29,7 +29,7 @@ export default function LoginPage() {
               applications. The UI is incredibly intuitive and fast.&rdquo;
             </p>
             <footer className="text-sm">
-              Alex Rivera — Full Stack Developer
+              Alex Smith — Full Stack Developer
             </footer>
           </blockquote>
         </div>
