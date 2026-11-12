@@ -14,7 +14,7 @@ export default function RecruiterDashboard() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">
-              Hiring Dashboard
+              Recruiter Dashboard
             </h1>
             <p className="text-muted-foreground mt-1">
               Manage your active listings and review new candidates.
